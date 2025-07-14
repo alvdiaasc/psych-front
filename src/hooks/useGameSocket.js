@@ -13,7 +13,14 @@ export const useGameSocket = (setGameState) => {
     setSocket(socketInstance);
 
     socketInstance.on('gameState', (state) => {
-      setGameStateRef.current(state);
+      // Asegurar que los arrays siempre existan
+      const safeState = {
+        ...state,
+        players: state.players || [],
+        answers: state.answers || [],
+        scores: state.scores || {}
+      };
+      setGameStateRef.current(safeState);
     });
 
     socketInstance.on('error', (error) => {

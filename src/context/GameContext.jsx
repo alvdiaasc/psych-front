@@ -11,6 +11,8 @@ export const GameProvider = ({ children }) => {
     question: null,
     answers: [],
     scores: {},
+    hasVoted: false,
+    timeLeft: 0
   });
 
   const socket = useGameSocket(setGameState);
