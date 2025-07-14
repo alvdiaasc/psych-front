@@ -1,3 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&family=Fredoka+One:wght@400&family=Quicksand:wght@300;400;500;600;700&family=Bungee:wght@400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-neutral-50 text-neutral-900 font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Botón primario estilo cartoon */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 text-lg font-game font-bold text-white;
+    @apply bg-gradient-to-r from-primary-500 to-primary-600;
+    @apply rounded-2xl shadow-game hover:shadow-game-hover active:shadow-game-active;
+    @apply transform hover:-translate-y-1 active:translate-y-1;
+    @apply transition-all duration-200 ease-out;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-300;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  }
+  
+  .btn-primary:hover {
+    @apply from-primary-400 to-primary-500;
+  }
+  
+  /* Botón secundario */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-4 text-lg font-game font-bold text-white;
+    @apply bg-gradient-to-r from-secondary-500 to-secondary-600;
+    @apply rounded-2xl shadow-game hover:shadow-game-hover active:shadow-game-active;
+    @apply transform hover:-translate-y-1 active:translate-y-1;
+    @apply transition-all duration-200 ease-out;
+    @apply focus:outline-none focus:ring-4 focus:ring-secondary-300;
+  }
+  
+  /* Botón de éxito */
+  .btn-success {
+    @apply inline-flex items-center justify-center px-8 py-4 text-lg font-game font-bold text-white;
+    @apply bg-gradient-to-r from-accent-500 to-accent-600;
+    @apply rounded-2xl shadow-game hover:shadow-game-hover active:shadow-game-active;
+    @apply transform hover:-translate-y-1 active:translate-y-1;
+    @apply transition-all duration-200 ease-out;
+    @apply focus:outline-none focus:ring-4 focus:ring-accent-300;
+  }
+  
+  /* Tarjeta de jugador */
+  .player-card {
+    @apply flex items-center gap-4 p-4 bg-white/90 backdrop-blur-sm;
+    @apply rounded-2xl border-2 border-neutral-200 hover:border-primary-300;
+    @apply shadow-card hover:shadow-card-hover;
+    @apply transform hover:-translate-y-1 transition-all duration-300;
+    @apply group cursor-pointer;
+  }
+  
+  /* Avatar de jugador */
+  .player-avatar {
+    @apply w-16 h-16 rounded-full flex items-center justify-center;
+    @apply text-2xl font-display text-white shadow-lg;
+    @apply bg-gradient-to-br from-primary-400 via-secondary-400 to-accent-400;
+    @apply group-hover:scale-110 transition-transform duration-300;
+  }
+  
+  /* Input estilo cartoon */
+  .input-game {
+    @apply w-full px-6 py-4 text-lg font-game;
+    @apply bg-white/95 backdrop-blur-sm;
+    @apply border-3 border-neutral-300 focus:border-primary-400;
+    @apply rounded-2xl shadow-inner;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-200;
+    @apply transition-all duration-200;
+    @apply placeholder:text-neutral-400;
+  }
+  
+  /* Fondo animado con partículas */
+  .animated-bg {
+    @apply min-h-screen relative overflow-hidden;
+    background: linear-gradient(135deg, #FF9800 0%, #9C27B0 50%, #4CAF50 100%);
+    background-size: 400% 400%;
+    animation: gradient-shift 8s ease infinite;
+  }
+  
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Tarjeta principal */
+  .main-card {
+    @apply bg-white/95 backdrop-blur-md p-8 rounded-3xl;
+    @apply shadow-floating border border-white/50;
+    @apply relative overflow-hidden;
+  }
+  
+  .main-card::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-white/20 to-transparent;
+    @apply pointer-events-none;
+  }
+  
+  /* Loader animado */
+  .loader {
+    @apply w-12 h-12 border-4 border-primary-200 border-t-primary-500;
+    @apply rounded-full animate-spin;
+  }
+  
+  /* Efecto de brillo */
+  .shine {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s ease;
+  }
+  
+  .shine:hover::before {
+    left: 100%;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .bg-party {
+    background: linear-gradient(135deg, #FF9800 0%, #9C27B0 50%, #4CAF50 100%);
+  }
+  
+  .bg-fun {
+    background: linear-gradient(45deg, #FFC107 0%, #FF9800 25%, #9C27B0 50%, #4CAF50 75%, #009688 100%);
+  }
+}

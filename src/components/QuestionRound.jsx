@@ -5,69 +5,86 @@ import { motion, AnimatePresence } from 'framer-motion';
 function QuestionRound() {
   const { gameState, socket } = useContext(GameContext);
   const [answer, setAnswer] = useState('');
-  const [remainingTime, setRemainingTime] = useState(null);
-  const [showWarning, setShowWarning] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // Escuchar actualizaciones del temporizador
-    socket.on('timerUpdate', ({ remainingTime }) => {
-      setRemainingTime(remainingTime);
+    if (gameState.phase === 'question' && timeLeft > 0 && !submitted) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [timeLeft, submitted, gameState.phase]);
+
+  useEffect(() => {
+    if (timeLeft === 0 && !submitted) {
+      handleSubmit();
+    }
+  }, [timeLeft, submitted]);
+
+  const handleSubmit = async () => {
+    if (!answer.trim() || submitted || isSubmitting) return;
+    
+    setIsSubmitting(true);
+    setSubmitted(true);
+    socket.emit('submitAnswer', { 
+      answer: answer.trim(),
+      roomCode: gameState.roomCode 
     });
+    
+    // Simular delay de envío para mejor UX
+    setTimeout(() => setIsSubmitting(false), 500);
+  };
 
-    // Limpiar el temporizador al desmontar
-    return () => {
-      socket.off('timerUpdate');
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    // Limpiar el input si la fase cambia (por ejemplo, a voting)
-    if (gameState.phase !== 'question') {
-      setAnswer('');
-      setRemainingTime(null);
-      setShowWarning(false);
-    }
-  }, [gameState.phase]);
-
-  useEffect(() => {
-    if (remainingTime <= 10) {
-      setShowWarning(true);
-      setTimeout(() => setShowWarning(false), 500);
-    }
-  }, [remainingTime]);
-
-  const submitAnswer = () => {
-    if (answer.trim()) {
-      socket.emit('submitAnswer', {
-        roomCode: gameState.roomCode,
-        answer,
-      });
-      setAnswer('');
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
     }
   };
 
+  const getTimeColor = () => {
+    if (timeLeft > 30) return 'text-success-600';
+    if (timeLeft > 15) return 'text-warning-600';
+    return 'text-danger-600';
+  };
+
+  const getTimeProgress = () => {
+    return (timeLeft / 60) * 100;
+  };
+
+  if (!gameState.currentQuestion) {
+    return (
+      <div className="animated-bg flex items-center justify-center">
+        <motion.div 
+          className="text-center"
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
+          <div className="text-6xl mb-4">🎯</div>
+          <p className="text-xl text-white font-game">Cargando pregunta...</p>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-secondary-light via-primary-light to-accent-light p-4 relative overflow-hidden"
-    >
+    <div className="animated-bg p-4 relative overflow-hidden">
       {/* Partículas de fondo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, i) => (
+        {[...Array(8)].map((_, index) => (
           <motion.div
-            key={i}
-            className="absolute w-28 h-28 bg-white/5 rounded-full backdrop-blur-sm"
+            key={index}
+            className="absolute w-4 h-4 bg-white/10 rounded-full"
             animate={{
-              y: [0, -150, 0],
-              x: [0, Math.random() * 60 - 30, 0],
-              scale: [1, 1.2, 1],
-              rotate: [0, 180],
+              y: [0, -50, 0],
+              x: [0, Math.random() * 30 - 15, 0],
+              opacity: [0.2, 0.6, 0.2],
             }}
             transition={{
-              duration: 6 + Math.random() * 4,
+              duration: 4 + Math.random() * 2,
               repeat: Infinity,
-              delay: i * 0.7,
+              delay: index * 0.5,
             }}
             style={{
               left: `${Math.random() * 100}%`,
@@ -77,90 +94,223 @@ function QuestionRound() {
         ))}
       </div>
 
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-2xl relative z-10"
-      >
-        <div className="text-center mb-8">
-          {gameState.phase === 'question' && (
-            <AnimatePresence>
-              {showWarning && (
-                <motion.div
-                  initial={{ scale: 1.2, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.8, opacity: 0 }}
-                  className="mb-4"
-                >
-                  <div className={`text-2xl font-game inline-block px-6 py-2 rounded-full ${
-                    remainingTime <= 10 ? 'bg-primary text-white' : 'bg-white/90 text-gray-800'
-                  } shadow-lg`}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                    <span>⏱️</span>
-                    <span>{remainingTime} segundos</span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          )}
-
-          <motion.h2 
-            className="text-display-sm font-display text-white mb-6 drop-shadow-lg tracking-wide"
-            animate={{ y: [0, -5, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            ¡Inventa una respuesta!
-          </motion.h2>
-        </div>
-
+      <div className="max-w-4xl mx-auto relative z-10">
+        {/* Header con timer */}
         <motion.div
-          className="bg-white/95 backdrop-blur-md p-8 rounded-2xl shadow-card mb-8 transform transition-all duration-300 hover:shadow-lg"
-          whileHover={{ scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          className="text-center mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <p className="text-xl font-game text-gray-800 text-center tracking-wide leading-relaxed">
-            {gameState.question.text}
-          </p>
+          <motion.div
+            className="inline-flex items-center gap-4 bg-white/90 backdrop-blur-sm rounded-3xl px-8 py-4 shadow-game-lg"
+            animate={{ scale: timeLeft <= 10 ? [1, 1.05, 1] : 1 }}
+            transition={{ duration: 0.5, repeat: timeLeft <= 10 ? Infinity : 0 }}
+          >
+            <div className="text-3xl">⏰</div>
+            <div className="text-center">
+              <div className={`text-3xl font-display font-bold ${getTimeColor()}`}>
+                {timeLeft}s
+              </div>
+              <div className="w-32 h-2 bg-neutral-200 rounded-full overflow-hidden mt-1">
+                <motion.div
+                  className={`h-full transition-colors duration-300 ${
+                    timeLeft > 30 
+                      ? 'bg-success-500' 
+                      : timeLeft > 15 
+                        ? 'bg-warning-500' 
+                        : 'bg-danger-500'
+                  }`}
+                  style={{ width: `${getTimeProgress()}%` }}
+                  transition={{ duration: 1 }}
+                />
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
 
-        <div className="space-y-4">
-          <motion.div className="w-full relative">
-            <textarea
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              placeholder="Escribe tu respuesta más ingeniosa..."
-              className="w-full p-4 rounded-xl border-2 border-primary-light bg-white/90 focus:border-primary focus:ring-2 focus:ring-primary-light/50 transition-all text-lg font-sans placeholder-gray-400 resize-none"
-              maxLength={100}
-              rows={3}
-            />
-            <motion.p 
-              className={`text-right mt-2 font-game tracking-wide ${
-                answer.length > 80 ? 'text-primary' : 'text-white/80'
-              }`}
-              animate={{ scale: answer.length > 80 ? [1, 1.1, 1] : 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              {answer.length}/100
-            </motion.p>
-          </motion.div>
-
-          <motion.button
-            onClick={submitAnswer}
-            disabled={!answer.trim()}
-            className="group w-full bg-gradient-to-br from-accent to-accent-dark disabled:from-gray-400 disabled:to-gray-500 text-white font-game text-xl py-4 rounded-xl shadow-game hover:shadow-game-hover transform hover:-translate-y-1 transition-all relative overflow-hidden"
-            whileHover={{ scale: answer.trim() ? 1.02 : 1 }}
-            whileTap={{ scale: answer.trim() ? 0.98 : 1 }}
+        {/* Pregunta */}
+        <motion.div
+          className="main-card mb-8 text-center"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
+        >
+          <motion.div
+            className="text-4xl mb-6"
+            animate={{ rotate: [0, 5, -5, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
           >
-            <span className="relative z-10 flex items-center justify-center gap-2">
-              <span className="text-2xl">🚀</span>
-              <span className="tracking-wide">¡Enviar Respuesta!</span>
+            🤔
+          </motion.div>
+          <h2 className="text-2xl md:text-3xl font-game font-bold text-neutral-800 leading-relaxed">
+            {gameState.currentQuestion}
+          </h2>
+        </motion.div>
+
+        {/* Área de respuesta */}
+        <motion.div
+          className="main-card"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          <AnimatePresence mode="wait">
+            {!submitted ? (
+              <motion.div
+                key="input"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-6"
+              >
+                <div>
+                  <label className="block text-lg font-game font-semibold text-neutral-700 mb-3">
+                    Tu respuesta creativa:
+                  </label>
+                  <motion.textarea
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Sé creativo... ¡Haz que los demás crean tu respuesta! 🎭"
+                    className="input-game min-h-[120px] resize-none"
+                    maxLength={200}
+                    disabled={submitted || timeLeft === 0}
+                    whileFocus={{ scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  />
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="text-sm text-neutral-500 font-game">
+                      {answer.length}/200 caracteres
+                    </span>
+                    <span className="text-sm text-neutral-500 font-game">
+                      Presiona Enter para enviar
+                    </span>
+                  </div>
+                </div>
+
+                <motion.button
+                  onClick={handleSubmit}
+                  disabled={!answer.trim() || submitted || timeLeft === 0 || isSubmitting}
+                  className={`btn-primary w-full shine relative overflow-hidden ${
+                    (!answer.trim() || timeLeft === 0) 
+                      ? 'opacity-50 cursor-not-allowed' 
+                      : ''
+                  }`}
+                  whileHover={answer.trim() && timeLeft > 0 ? { scale: 1.02, y: -2 } : {}}
+                  whileTap={answer.trim() && timeLeft > 0 ? { scale: 0.98 } : {}}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <AnimatePresence mode="wait">
+                    {isSubmitting ? (
+                      <motion.div
+                        key="submitting"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+                        />
+                        <span>Enviando...</span>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="submit"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <span className="text-xl">🚀</span>
+                        <span>Enviar Respuesta</span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="submitted"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center py-8"
+              >
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 10, -10, 0]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="text-6xl mb-4"
+                >
+                  ✅
+                </motion.div>
+                <h3 className="text-2xl font-game font-bold text-success-600 mb-2">
+                  ¡Respuesta Enviada!
+                </h3>
+                <p className="text-neutral-600 font-game">
+                  Esperando a que los demás terminen...
+                </p>
+                
+                {/* Tu respuesta */}
+                <motion.div
+                  className="mt-6 p-4 bg-success-50 border-2 border-success-200 rounded-2xl"
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <p className="text-sm font-game font-semibold text-success-700 mb-1">
+                    Tu respuesta:
+                  </p>
+                  <p className="text-neutral-700 font-game italic">
+                    "{answer}"
+                  </p>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Información de jugadores */}
+        <motion.div
+          className="mt-8 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3">
+            <span className="text-xl">👥</span>
+            <span className="font-game text-neutral-600">
+              {gameState.players?.filter(p => p.hasAnswered).length || 0} / {gameState.players?.length || 0} han respondido
             </span>
-            <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-          </motion.button>
-        </div>
-      </motion.div>
-    </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Consejos */}
+        {!submitted && (
+          <motion.div
+            className="mt-8 text-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+          >
+            <div className="bg-primary-50 border-2 border-primary-200 rounded-2xl p-4 max-w-md mx-auto">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-xl">💡</span>
+                <span className="font-game font-semibold text-primary-700">Consejo</span>
+              </div>
+              <p className="text-sm text-primary-600 font-game">
+                ¡Sé creativo pero creíble! La mejor respuesta es la que engaña a más jugadores.
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </div>
   );
 }
 
