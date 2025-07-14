@@ -32,9 +32,9 @@ function Lobby() {
     >
       {/* Partículas flotantes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(8)].map((_, i) => (
+        {[...Array(8)].map((_, index) => (
           <motion.div
-            key={i}
+            key={index}
             className="absolute w-24 h-24 bg-white/5 rounded-full backdrop-blur-sm"
             animate={{
               y: [0, -200, 0],
@@ -45,7 +45,7 @@ function Lobby() {
             transition={{
               duration: 8 + Math.random() * 4,
               repeat: Infinity,
-              delay: i * 0.5,
+              delay: index * 0.5,
             }}
             style={{
               left: `${Math.random() * 100}%`,

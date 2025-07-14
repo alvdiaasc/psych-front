@@ -38,9 +38,9 @@ function Home() {
     >
       {/* Burbujas decorativas de fondo */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(5)].map((_, i) => (
+        {[...Array(5)].map((_, index) => (
           <motion.div
-            key={i}
+            key={index}
             className="absolute w-32 h-32 bg-white/10 rounded-full backdrop-blur-sm"
             animate={{
               y: [0, -100, 0],
@@ -50,7 +50,7 @@ function Home() {
             transition={{
               duration: 5 + Math.random() * 3,
               repeat: Infinity,
-              delay: i * 0.8,
+              delay: index * 0.8,
             }}
             style={{
               left: `${Math.random() * 100}%`,

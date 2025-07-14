@@ -43,9 +43,9 @@ function Leaderboard() {
     >
       {/* Confeti animado */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(12)].map((_, i) => (
+        {[...Array(12)].map((_, index) => (
           <motion.div
-            key={i}
+            key={index}
             className="absolute w-4 h-4"
             animate={{
               y: [-20, window.innerHeight + 20],
@@ -58,14 +58,14 @@ function Leaderboard() {
             transition={{
               duration: 5 + Math.random() * 3,
               repeat: Infinity,
-              delay: i * 0.3,
+              delay: index * 0.3,
               ease: "linear",
             }}
           >
             <div 
               className="w-full h-full transform rotate-45"
               style={{
-                backgroundColor: ['#FFD700', '#FF69B4', '#7FFF00', '#00BFFF'][i % 4],
+                backgroundColor: ['#FFD700', '#FF69B4', '#7FFF00', '#00BFFF'][index % 4],
               }}
             />
           </motion.div>

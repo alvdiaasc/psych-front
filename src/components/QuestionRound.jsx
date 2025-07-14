@@ -24,6 +24,8 @@ function QuestionRound() {
     // Limpiar el input si la fase cambia (por ejemplo, a voting)
     if (gameState.phase !== 'question') {
       setAnswer('');
+      setRemainingTime(null);
+      setShowWarning(false);
     }
   }, [gameState.phase]);
 
