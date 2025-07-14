@@ -31,24 +31,23 @@ function Home() {
   };
 
   return (
-    <div className="animated-bg flex flex-col items-center justify-center p-4 relative">
-      {/* Partículas flotantes decorativas */}
+    <div className="min-h-screen bg-gradient-to-br from-primary-400 via-secondary-400 to-accent-400 flex flex-col items-center justify-center p-4 relative">
+      {/* Elementos decorativos sutiles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(12)].map((_, index) => (
+        {[...Array(6)].map((_, index) => (
           <motion.div
             key={index}
-            className="absolute w-8 h-8 bg-white/10 rounded-full backdrop-blur-sm"
+            className="absolute w-20 h-20 bg-white/10 rounded-full backdrop-blur-sm"
             animate={{
-              y: [0, -100, 0],
-              x: [0, Math.random() * 100 - 50, 0],
-              scale: [1, 1.5, 1],
-              rotate: [0, 360],
-              opacity: [0.3, 0.8, 0.3],
+              y: [0, -30, 0],
+              x: [0, Math.random() * 50 - 25, 0],
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.6, 0.3],
             }}
             transition={{
-              duration: 6 + Math.random() * 4,
+              duration: 8 + Math.random() * 4,
               repeat: Infinity,
-              delay: index * 0.3,
+              delay: index * 1,
               ease: "easeInOut"
             }}
             style={{
@@ -61,26 +60,26 @@ function Home() {
 
       {/* Elementos de fondo adicionales */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, index) => (
+        {[...Array(4)].map((_, index) => (
           <motion.div
             key={`star-${index}`}
-            className="absolute text-4xl opacity-20"
+            className="absolute text-2xl opacity-20"
             animate={{
-              y: [0, -20, 0],
-              rotate: [0, 360],
-              scale: [1, 1.2, 1],
+              y: [0, -15, 0],
+              rotate: [0, 180, 360],
+              scale: [1, 1.1, 1],
             }}
             transition={{
-              duration: 4 + Math.random() * 2,
+              duration: 6 + Math.random() * 2,
               repeat: Infinity,
-              delay: index * 0.8,
+              delay: index * 1.5,
             }}
             style={{
-              left: `${10 + Math.random() * 80}%`,
-              top: `${10 + Math.random() * 80}%`,
+              left: `${20 + Math.random() * 60}%`,
+              top: `${20 + Math.random() * 60}%`,
             }}
           >
-            {index % 3 === 0 ? '⭐' : index % 3 === 1 ? '🎊' : '🎈'}
+            {index % 2 === 0 ? '⭐' : '🎈'}
           </motion.div>
         ))}
       </div>

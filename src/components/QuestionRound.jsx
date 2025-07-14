@@ -53,42 +53,49 @@ function QuestionRound() {
     return (timeLeft / 60) * 100;
   };
 
-  if (!gameState.currentQuestion) {
+  if (!gameState.question) {
     return (
-      <div className="animated-bg flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-primary-400 via-secondary-400 to-accent-400 flex items-center justify-center p-4">
         <motion.div 
-          className="text-center"
-          animate={{ scale: [1, 1.1, 1] }}
+          className="text-center bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-game-lg"
+          animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         >
           <div className="text-6xl mb-4">🎯</div>
-          <p className="text-xl text-white font-game">Cargando pregunta...</p>
+          <p className="text-xl text-neutral-700 font-game font-semibold">Cargando pregunta...</p>
+          <div className="mt-4 flex justify-center">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="w-6 h-6 border-2 border-primary-200 border-t-primary-500 rounded-full"
+            />
+          </div>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="animated-bg p-4 relative overflow-hidden">
-      {/* Partículas de fondo */}
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 p-4 relative">
+      {/* Elementos decorativos sutiles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(8)].map((_, index) => (
+        {[...Array(4)].map((_, index) => (
           <motion.div
             key={index}
-            className="absolute w-4 h-4 bg-white/10 rounded-full"
+            className="absolute w-32 h-32 bg-gradient-to-br from-primary-100/30 to-secondary-100/30 rounded-full blur-xl"
             animate={{
-              y: [0, -50, 0],
-              x: [0, Math.random() * 30 - 15, 0],
-              opacity: [0.2, 0.6, 0.2],
+              x: [0, 100, -50, 0],
+              y: [0, -100, 50, 0],
+              scale: [1, 1.2, 0.8, 1],
             }}
             transition={{
-              duration: 4 + Math.random() * 2,
+              duration: 20 + index * 5,
               repeat: Infinity,
-              delay: index * 0.5,
+              ease: "easeInOut"
             }}
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${20 + index * 20}%`,
+              top: `${10 + index * 15}%`,
             }}
           />
         ))}
@@ -144,7 +151,7 @@ function QuestionRound() {
             🤔
           </motion.div>
           <h2 className="text-2xl md:text-3xl font-game font-bold text-neutral-800 leading-relaxed">
-            {gameState.currentQuestion}
+            {gameState.question?.text || gameState.question}
           </h2>
         </motion.div>
 
