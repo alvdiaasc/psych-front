@@ -11,8 +11,11 @@ export const GameProvider = ({ children }) => {
     question: null,
     answers: [],
     scores: {},
-    hasVoted: false,
-    timeLeft: 0
+    punishments: [],
+    availablePunishments: [],
+    winnerId: null,
+    currentRound: 0,
+    maxRounds: 5
   });
 
   const socket = useGameSocket(setGameState);

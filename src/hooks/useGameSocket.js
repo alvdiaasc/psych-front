@@ -13,12 +13,14 @@ export const useGameSocket = (setGameState) => {
     setSocket(socketInstance);
 
     socketInstance.on('gameState', (state) => {
-      // Asegurar que los arrays siempre existan
+      // Asegurar que todos los arrays estén inicializados
       const safeState = {
         ...state,
         players: state.players || [],
         answers: state.answers || [],
-        scores: state.scores || {}
+        scores: state.scores || {},
+        punishments: state.punishments || [],
+        availablePunishments: state.availablePunishments || []
       };
       setGameStateRef.current(safeState);
     });

@@ -143,7 +143,7 @@ function VotingRound() {
           transition={{ delay: 0.5 }}
         >
           <AnimatePresence mode="popLayout">
-            {gameState.answers && gameState.players && gameState.answers.map((answer, index) => (
+            {gameState.answers && gameState.answers.map((answer, index) => (
               <motion.button
                 key={answer.id}
                 onClick={() => vote(answer.id)}
@@ -195,18 +195,11 @@ function VotingRound() {
                        'bg-gradient-to-br from-danger-400 to-danger-600',
                        'bg-gradient-to-br from-success-400 to-success-600'][index % 6]
                     }`}>
-                      {(() => {
-                        const player = gameState.players?.find(p => p.id === answer.playerId);
-                        const playerName = player?.name || 'J';
-                        return playerName.charAt(0).toUpperCase();
-                      })()}
+                      {(gameState.players?.find(p => p.id === answer.playerId)?.name || 'J').charAt(0).toUpperCase()}
                     </div>
                     <div>
                       <p className="font-game text-neutral-800 font-semibold text-lg">
-                        {(() => {
-                          const player = gameState.players?.find(p => p.id === answer.playerId);
-                          return player?.name || `Jugador ${index + 1}`;
-                        })()}
+                        {gameState.players?.find(p => p.id === answer.playerId)?.name || `Jugador ${index + 1}`}
                       </p>
                       <p className="text-xs text-neutral-500 font-game">
                         Jugador #{index + 1}

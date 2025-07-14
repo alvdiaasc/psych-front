@@ -122,7 +122,7 @@ function Lobby() {
           {/* Slots vacíos */}
           {gameState.players && gameState.players.length < 8 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-              {[...Array(Math.min(3, 8 - gameState.players.length))].map((_, index) => (
+              {[...Array(Math.min(3, 8 - (gameState.players?.length || 0)))].map((_, index) => (
                 <motion.div
                   key={`empty-${index}`}
                   className="border-2 border-dashed border-neutral-300 rounded-2xl p-4 flex items-center justify-center min-h-[80px]"
