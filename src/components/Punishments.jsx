@@ -29,7 +29,7 @@ function Punishments() {
           className="text-center mb-8"
         >
           <h1 className="text-4xl md:text-5xl font-display text-neutral-800 mb-4">
-            🎭 ¡Hora de los Castigos!
+            ¡Hora de los Castigos!
           </h1>
           <p className="text-xl font-game text-neutral-600">
             El ganador ha elegido los siguientes castigos para los perdedores
@@ -43,17 +43,22 @@ function Punishments() {
           animate="show"
         >
           <div className="space-y-6">
-            {gameState.punishments && gameState.punishments.map((punishment, index) => (
+            {!gameState.punishments || gameState.punishments.length === 0 ? (
+              <div className="text-center p-8">
+                <p className="text-xl font-game text-neutral-600">
+                  No hay castigos disponibles o aún no se han seleccionado.
+                </p>
+              </div>
+            ) : (
+              gameState.punishments.map((punishment, index) => (
               <motion.div
                 key={index}
                 variants={item}
                 className="bg-gradient-to-r from-danger-50 to-warning-50 border-2 border-danger-200 rounded-2xl p-6"
               >
                 <div className="flex items-start gap-4">
-                  <div className="text-3xl">
-                    {punishment.type === 'physical' ? '🏃‍♂️' : 
-                     punishment.type === 'silly' ? '🤡' : 
-                     punishment.type === 'creative' ? '🎨' : '😂'}
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-danger-400 to-warning-500 flex items-center justify-center text-white font-display text-lg shadow-md">
+                    #{index + 1}
                   </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-game font-bold text-neutral-800 mb-2">
@@ -69,15 +74,16 @@ function Punishments() {
                         punishment.type === 'creative' ? 'bg-green-100 text-green-700' :
                         'bg-orange-100 text-orange-700'
                       }`}>
-                        {punishment.type === 'physical' ? '💪 Físico' :
-                         punishment.type === 'silly' ? '🤪 Divertido' :
-                         punishment.type === 'creative' ? '🎭 Creativo' : '😄 Gracioso'}
+                        {punishment.type === 'physical' ? 'Físico' :
+                         punishment.type === 'silly' ? 'Divertido' :
+                         punishment.type === 'creative' ? 'Creativo' : 'Gracioso'}
                       </span>
                     </div>
                   </div>
                 </div>
               </motion.div>
-            ))}
+              ))
+            )}
           </div>
 
           <motion.div
@@ -86,7 +92,6 @@ function Punishments() {
             transition={{ delay: 1 }}
             className="text-center mt-8 p-6 bg-primary-50 border-2 border-primary-200 rounded-2xl"
           >
-            <div className="text-3xl mb-3">⏰</div>
             <p className="font-game font-bold text-primary-700 text-lg mb-2">
               ¡A cumplir los castigos!
             </p>

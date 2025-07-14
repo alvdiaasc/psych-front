@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { GameContext } from '../context/GameContext';
+import React, { useContext } from 'react';            {['V', '★', '✨', '�'][index % 4]}import { GameContext } from '../context/GameContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function VotingRound() {
@@ -78,8 +77,8 @@ function VotingRound() {
                   <motion.span
                     animate={{ rotate: [0, 360] }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="w-6 h-6 border-2 border-current border-t-transparent rounded-full"
                   >
-                    ⏱️
                   </motion.span>
                   <span>{gameState.timeLeft} segundos</span>
                 </div>
@@ -92,7 +91,7 @@ function VotingRound() {
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
-            🗳️ ¡Hora de Votar!
+            ¡Hora de Votar!
           </motion.h2>
           <motion.p 
             className="text-xl font-game text-white/90 tracking-wide"
@@ -179,35 +178,7 @@ function VotingRound() {
                 </motion.div>
 
                 {/* Contenido de la respuesta */}
-                <div className="relative z-10 pr-12">
-                  {/* Avatar y nombre del jugador */}
-                  <motion.div 
-                    className="flex items-center gap-3 mb-4"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.6 + index * 0.05 }}
-                  >
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-display text-lg shadow-md ${
-                      ['bg-gradient-to-br from-primary-400 to-primary-600',
-                       'bg-gradient-to-br from-secondary-400 to-secondary-600', 
-                       'bg-gradient-to-br from-accent-400 to-accent-600',
-                       'bg-gradient-to-br from-warning-400 to-warning-600',
-                       'bg-gradient-to-br from-danger-400 to-danger-600',
-                       'bg-gradient-to-br from-success-400 to-success-600'][index % 6]
-                    }`}>
-                      {(gameState.players?.find(p => p.id === answer.playerId)?.name || 'J').charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <p className="font-game text-neutral-800 font-semibold text-lg">
-                        {gameState.players?.find(p => p.id === answer.playerId)?.name || `Jugador ${index + 1}`}
-                      </p>
-                      <p className="text-xs text-neutral-500 font-game">
-                        Jugador #{index + 1}
-                      </p>
-                    </div>
-                  </motion.div>
-
-                  {/* Respuesta */}
+                <div className="relative z-10 pr-12">                  {/* Respuesta anónima */}
                   <motion.div
                     className="bg-neutral-50 p-4 rounded-xl border-l-4 border-primary-300"
                     initial={{ opacity: 0, y: 10 }}
@@ -272,7 +243,7 @@ function VotingRound() {
               transition={{ duration: 2, repeat: Infinity }}
             >
               <p className="text-white/80 font-game mb-4">
-                🎯 Tu voto cuenta para determinar al ganador de esta ronda
+                Tu voto cuenta para determinar al ganador de esta ronda
               </p>
               <motion.div 
                 className="flex justify-center gap-2"

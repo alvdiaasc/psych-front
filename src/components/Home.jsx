@@ -62,7 +62,7 @@ function Home() {
               ease: "easeInOut" 
             }}
           >
-            🧠 PSYCH!
+            PSYCH!
           </motion.h1>
           <motion.p 
             className="text-xl font-game text-neutral-600 tracking-wide"
@@ -70,7 +70,6 @@ function Home() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            ¡Engaña a tus amigos!
           </motion.p>
         </motion.div>
 
@@ -100,7 +99,6 @@ function Home() {
               type="text"
               value={playerName}
               onChange={(e) => setPlayerName(e.target.value)}
-              placeholder="Ej: Jugador Genial"
               className="input-game"
               maxLength={20}
             />
@@ -120,7 +118,6 @@ function Home() {
               type="text"
               value={roomCode}
               onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-              placeholder="Ej: ABC123"
               className="input-game uppercase"
               maxLength={6}
             />
@@ -133,11 +130,9 @@ function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               className="bg-danger-50 border-2 border-danger-200 text-danger-700 p-4 rounded-2xl"
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-xl">⚠️</span>
-                <p className="font-game font-semibold">{error}</p>
-              </div>
+            >            <div className="flex items-center gap-2">
+              <p className="font-game font-semibold">{error}</p>
+            </div>
             </motion.div>
           )}
 
@@ -156,13 +151,6 @@ function Home() {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               <span className="relative z-10 flex items-center justify-center gap-3">
-                <motion.span 
-                  className="text-2xl"
-                  animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  🎮
-                </motion.span>
                 <span>Crear Nueva Sala</span>
               </span>
             </motion.button>
@@ -176,16 +164,6 @@ function Home() {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               <span className="relative z-10 flex items-center justify-center gap-3">
-                <motion.span 
-                  className="text-2xl"
-                  animate={{ 
-                    scale: roomCode.trim() ? [1, 1.1, 1] : 1,
-                    rotate: roomCode.trim() ? [0, 5, -5, 0] : 0
-                  }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  🎯
-                </motion.span>
                 <span>Unirse con Código</span>
               </span>
             </motion.button>
@@ -221,14 +199,6 @@ function Home() {
             animate={{ y: [0, -2, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            <span>Hecho con</span>
-            <motion.span
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            >
-              ❤️
-            </motion.span>
-            <span>para diversión</span>
           </motion.div>
         </motion.div>
       </motion.div>

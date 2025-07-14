@@ -43,11 +43,11 @@ function Leaderboard() {
     };
   }) : [];
 
-  // Emojis y colores para posiciones
+  // Configuración para posiciones (sin emojis)
   const positionConfig = {
-    1: { emoji: '🥇', color: 'from-yellow-400 to-yellow-600', bgColor: 'bg-yellow-50', textColor: 'text-yellow-700' },
-    2: { emoji: '🥈', color: 'from-gray-400 to-gray-600', bgColor: 'bg-gray-50', textColor: 'text-gray-700' },
-    3: { emoji: '🥉', color: 'from-amber-600 to-amber-800', bgColor: 'bg-amber-50', textColor: 'text-amber-700' },
+    1: { color: 'from-yellow-400 to-yellow-600', bgColor: 'bg-yellow-50', textColor: 'text-yellow-700' },
+    2: { color: 'from-gray-400 to-gray-600', bgColor: 'bg-gray-50', textColor: 'text-gray-700' },
+    3: { color: 'from-amber-600 to-amber-800', bgColor: 'bg-amber-50', textColor: 'text-amber-700' },
   };
 
   return (
@@ -64,7 +64,7 @@ function Leaderboard() {
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            {isLastRound ? '🏆 ¡Resultados Finales!' : '📊 Puntuaciones'}
+            {isLastRound ? 'Resultados Finales' : 'Puntuaciones'}
           </motion.h1>
           
           {!isLastRound && (
@@ -85,7 +85,7 @@ function Leaderboard() {
             transition={{ delay: 0.2 }}
           >
             <h2 className="text-2xl font-game font-bold text-neutral-800 text-center mb-6">
-              🏆 Podio de Ganadores
+              Podio de Ganadores
             </h2>
             
             <div className="flex justify-center items-end gap-4 mb-6">
@@ -118,17 +118,9 @@ function Leaderboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-              >
-                <div className="w-24 h-20 bg-gradient-to-t from-yellow-400 to-yellow-500 rounded-t-lg flex items-center justify-center mb-2 relative">
-                  <span className="text-white font-bold text-lg">1º</span>
-                  <motion.div
-                    className="absolute -top-2 -right-2"
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    👑
-                  </motion.div>
-                </div>
+              >                  <div className="w-24 h-20 bg-gradient-to-t from-yellow-400 to-yellow-500 rounded-t-lg flex items-center justify-center mb-2 relative">
+                    <span className="text-white font-bold text-lg">1º</span>
+                  </div>
                 <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${positionConfig[1].color} flex items-center justify-center text-white font-display text-2xl shadow-xl mb-2`}>
                   {playersWithScores[0].name.charAt(0).toUpperCase()}
                 </div>
@@ -174,7 +166,7 @@ function Leaderboard() {
           transition={{ delay: 0.6 }}
         >
           <h3 className="text-xl font-game font-bold text-neutral-800 text-center mb-4">
-            📋 Clasificación Completa
+            Clasificación Completa
           </h3>
           
           <div className="space-y-3">
@@ -193,8 +185,8 @@ function Leaderboard() {
                 >
                   {/* Posición */}
                   <div className="flex-shrink-0 text-center">
-                    <div className="text-2xl">
-                      {positionConfig[player.position]?.emoji || `#${player.position}`}
+                    <div className="text-2xl font-bold">
+                      #{player.position}
                     </div>
                   </div>
 
@@ -244,7 +236,6 @@ function Leaderboard() {
               {/* Juego terminado */}
               <div className="bg-primary-50 border-2 border-primary-200 rounded-2xl p-6 max-w-md mx-auto mb-6">
                 <div className="text-center">
-                  <div className="text-4xl mb-2">🎊</div>
                   <p className="font-game font-bold text-primary-700 text-xl mb-2">
                     ¡Juego Terminado!
                   </p>
@@ -262,13 +253,6 @@ function Leaderboard() {
                   whileTap={{ scale: 0.98 }}
                 >
                   <span className="flex items-center justify-center gap-3">
-                    <motion.span 
-                      className="text-2xl"
-                      animate={{ rotate: [0, 360] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      🔄
-                    </motion.span>
                     <span>Jugar de Nuevo</span>
                   </span>
                 </motion.button>
@@ -279,7 +263,6 @@ function Leaderboard() {
               {/* Continuar siguiente ronda */}
               <div className="bg-accent-50 border-2 border-accent-200 rounded-2xl p-6 max-w-md mx-auto mb-6">
                 <div className="text-center">
-                  <div className="text-3xl mb-2">⏳</div>
                   <p className="font-game font-semibold text-accent-700 mb-1">
                     Preparándose para la siguiente ronda...
                   </p>
@@ -309,9 +292,6 @@ function Leaderboard() {
                 }
               >
                 <span className="flex items-center justify-center gap-3">
-                  <span className="text-2xl">
-                    {gameState.ready?.includes(socket?.id) ? '✅' : '👍'}
-                  </span>
                   <span>
                     {gameState.ready?.includes(socket?.id) ? 'Listo!' : 'Estoy Listo'}
                   </span>

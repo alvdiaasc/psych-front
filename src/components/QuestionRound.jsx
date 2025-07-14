@@ -61,7 +61,7 @@ function QuestionRound() {
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         >
-          <div className="text-6xl mb-4">🎯</div>
+          <div className="text-6xl mb-4 w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white font-display text-2xl">?</div>
           <p className="text-xl text-neutral-700 font-game font-semibold">Cargando pregunta...</p>
           <div className="mt-4 flex justify-center">
             <motion.div
@@ -143,13 +143,6 @@ function QuestionRound() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
         >
-          <motion.div
-            className="text-4xl mb-6"
-            animate={{ rotate: [0, 5, -5, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            🤔
-          </motion.div>
           <h2 className="text-2xl md:text-3xl font-game font-bold text-neutral-800 leading-relaxed">
             {gameState.question?.text || 'Cargando pregunta...'}
           </h2>
@@ -179,7 +172,7 @@ function QuestionRound() {
                     value={answer}
                     onChange={(e) => setAnswer(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Sé creativo... ¡Haz que los demás crean tu respuesta! 🎭"
+                    placeholder="Sé creativo... ¡Haz que los demás crean tu respuesta!"
                     className="input-game min-h-[120px] resize-none"
                     maxLength={200}
                     disabled={submitted || timeLeft === 0}

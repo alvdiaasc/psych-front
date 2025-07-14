@@ -37,7 +37,7 @@ function WinnerSelection() {
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            🏆 ¡Felicidades, Ganador!
+            ¡Felicidades, Ganador!
           </motion.h1>
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3 inline-block shadow-lg">
             <p className="text-lg font-game text-neutral-600">
@@ -70,10 +70,8 @@ function WinnerSelection() {
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <div className="text-2xl">
-                    {punishment.type === 'physical' ? '🏃‍♂️' : 
-                     punishment.type === 'silly' ? '🤡' : 
-                     punishment.type === 'creative' ? '🎨' : '😂'}
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-danger-400 to-warning-500 flex items-center justify-center text-white font-display text-sm shadow-md">
+                    #{index + 1}
                   </div>
                   <div className="flex-1">
                     <p className="font-game text-neutral-800 leading-relaxed">
@@ -86,9 +84,9 @@ function WinnerSelection() {
                         punishment.type === 'creative' ? 'bg-green-100 text-green-700' :
                         'bg-orange-100 text-orange-700'
                       }`}>
-                        {punishment.type === 'physical' ? '💪 Físico' :
-                         punishment.type === 'silly' ? '🤪 Divertido' :
-                         punishment.type === 'creative' ? '🎭 Creativo' : '😄 Gracioso'}
+                        {punishment.type === 'physical' ? 'Físico' :
+                         punishment.type === 'silly' ? 'Divertido' :
+                         punishment.type === 'creative' ? 'Creativo' : 'Gracioso'}
                       </span>
                     </div>
                   </div>
@@ -119,7 +117,6 @@ function WinnerSelection() {
               whileTap={selectedPunishments.length > 0 ? { scale: 0.98 } : {}}
             >
               <span className="flex items-center justify-center gap-3">
-                <span className="text-2xl">🎯</span>
                 <span>Confirmar Castigos</span>
               </span>
             </motion.button>

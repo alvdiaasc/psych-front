@@ -49,7 +49,7 @@ function Lobby() {
             animate={{ scale: [1, 1.02, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            🎮 Sala de Juego
+            Sala de Juego
           </motion.h1>
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3 inline-block shadow-lg">
             <p className="text-lg font-game text-neutral-600">
@@ -97,7 +97,7 @@ function Lobby() {
                       <div className="flex items-center gap-2">
                         {index === 0 && (
                           <span className="text-xs bg-warning-100 text-warning-700 px-2 py-1 rounded-full font-game font-semibold">
-                            👑 Host
+                            Host
                           </span>
                         )}
                         <span className="text-xs text-neutral-500 font-game">
@@ -201,26 +201,6 @@ function Lobby() {
               </div>
             </div>
           )}
-
-          {/* Información del juego */}
-          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 max-w-md mx-auto">
-            <div className="flex items-center justify-center gap-4 text-sm text-neutral-600 font-game">
-              <div className="flex items-center gap-1">
-                <span>👥</span>
-                <span>2-8 jugadores</span>
-              </div>
-              <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
-              <div className="flex items-center gap-1">
-                <span>⏱️</span>
-                <span>15-30 min</span>
-              </div>
-              <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
-              <div className="flex items-center gap-1">
-                <span>🧠</span>
-                <span>Creatividad</span>
-              </div>
-            </div>
-          </div>
 
           {/* Enlace para compartir */}
           <motion.div
