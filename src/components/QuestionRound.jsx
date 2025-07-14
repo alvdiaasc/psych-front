@@ -5,6 +5,19 @@ import { motion } from 'framer-motion';
 function QuestionRound() {
   const { gameState, socket } = useContext(GameContext);
   const [answer, setAnswer] = useState('');
+  const [remainingTime, setRemainingTime] = useState(null);
+
+  useEffect(() => {
+    // Escuchar actualizaciones del temporizador
+    socket.on('timerUpdate', ({ remainingTime }) => {
+      setRemainingTime(remainingTime);
+    });
+
+    // Limpiar el temporizador al desmontar
+    return () => {
+      socket.off('timerUpdate');
+    };
+  }, [socket]);
 
   useEffect(() => {
     // Limpiar el input si la fase cambia (por ejemplo, a voting)
@@ -35,9 +48,15 @@ function QuestionRound() {
       )}
       <h3 className="text-lg font-bold mb-4">Pregunta</h3>
       <p className="mb-4">{gameState.question.text}</p>
+
+      {/* Mostrar el temporizador */}
+      {remainingTime !== null && (
+        <p className="text-red-500 font-bold mb-4">Tiempo restante: {remainingTime} segundos</p>
+      )}
+
       <input
         type="text"
-        placeholder="Tu respuesta falsa"
+        placeholder="Tu respuesta..."
         value={answer}
         onChange={(e) => setAnswer(e.target.value)}
         className="w-full p-2 border rounded mb-4"
