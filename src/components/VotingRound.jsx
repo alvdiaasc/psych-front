@@ -15,32 +15,32 @@ function VotingRound() {
   };
 
   return (
-    <div className="animated-bg flex flex-col items-center justify-center p-4 relative">
-      {/* Partículas flotantes temáticas de votación */}
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 flex flex-col items-center justify-center p-4 relative">
+      {/* Elementos decorativos sutiles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, index) => (
+        {[...Array(8)].map((_, index) => (
           <motion.div
             key={index}
             className="absolute"
             animate={{
-              y: [0, -150, 0],
-              x: [0, Math.random() * 100 - 50, 0],
-              rotate: [0, 360],
-              opacity: [0.1, 0.4, 0.1],
+              y: [0, -50, 0],
+              x: [0, Math.random() * 30 - 15, 0],
+              rotate: [0, 180, 360],
+              opacity: [0.1, 0.3, 0.1],
             }}
             transition={{
-              duration: 8 + Math.random() * 4,
+              duration: 10 + Math.random() * 5,
               repeat: Infinity,
-              delay: index * 0.3,
+              delay: index * 0.5,
               ease: "easeInOut"
             }}
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              fontSize: `${24 + Math.random() * 16}px`,
+              fontSize: `${20 + Math.random() * 8}px`,
             }}
           >
-            {['🗳️', '✋', '👆', '🎯', '⭐', '🏆', '💭', '🤔'][index % 8]}
+            {['🗳️', '⭐', '�', '💭'][index % 4]}
           </motion.div>
         ))}
       </div>
@@ -195,11 +195,11 @@ function VotingRound() {
                        'bg-gradient-to-br from-danger-400 to-danger-600',
                        'bg-gradient-to-br from-success-400 to-success-600'][index % 6]
                     }`}>
-                      {answer.playerName.charAt(0).toUpperCase()}
+                      {(gameState.players?.find(p => p.id === answer.playerId)?.name || 'J').charAt(0).toUpperCase()}
                     </div>
                     <div>
                       <p className="font-game text-neutral-800 font-semibold text-lg">
-                        {answer.playerName}
+                        {gameState.players?.find(p => p.id === answer.playerId)?.name || `Jugador ${index + 1}`}
                       </p>
                       <p className="text-xs text-neutral-500 font-game">
                         Jugador #{index + 1}

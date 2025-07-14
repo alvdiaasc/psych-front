@@ -25,34 +25,108 @@ function WinnerSelection() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg"
-    >
-      <h2 className="text-xl font-bold mb-4">Selecciona los castigos</h2>
-      <ul className="list-disc pl-5">
-        {gameState.availablePunishments.map((punishment, index) => (
-          <li key={index} className="mb-2">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={selectedPunishments.includes(punishment)}
-                onChange={() => togglePunishment(punishment)}
-                className="mr-2"
-              />
-              {punishment.text}
-            </label>
-          </li>
-        ))}
-      </ul>
-      <button
-        onClick={submitPunishments}
-        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mt-4"
-      >
-        Enviar castigos
-      </button>
-    </motion.div>
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-4xl mx-auto">
+        <motion.div
+          className="text-center mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <motion.h1 
+            className="text-4xl md:text-5xl font-display text-neutral-800 mb-4"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            🏆 ¡Felicidades, Ganador!
+          </motion.h1>
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3 inline-block shadow-lg">
+            <p className="text-lg font-game text-neutral-600">
+              Elige los castigos para los demás jugadores
+            </p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="main-card"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h2 className="text-2xl font-game font-bold text-neutral-800 text-center mb-6">
+            Selecciona los castigos (máximo 3)
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            {gameState.availablePunishments?.map((punishment, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => togglePunishment(punishment)}
+                className={`p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300 ${
+                  selectedPunishments.includes(punishment)
+                    ? 'bg-primary-100 border-primary-400 shadow-lg'
+                    : 'bg-white border-neutral-200 hover:border-primary-300'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="text-2xl">
+                    {punishment.type === 'physical' ? '🏃‍♂️' : 
+                     punishment.type === 'silly' ? '🤡' : 
+                     punishment.type === 'creative' ? '🎨' : '😂'}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-game text-neutral-800 leading-relaxed">
+                      {punishment.text}
+                    </p>
+                    <div className="mt-2">
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-game font-semibold ${
+                        punishment.type === 'physical' ? 'bg-blue-100 text-blue-700' :
+                        punishment.type === 'silly' ? 'bg-purple-100 text-purple-700' :
+                        punishment.type === 'creative' ? 'bg-green-100 text-green-700' :
+                        'bg-orange-100 text-orange-700'
+                      }`}>
+                        {punishment.type === 'physical' ? '💪 Físico' :
+                         punishment.type === 'silly' ? '🤪 Divertido' :
+                         punishment.type === 'creative' ? '🎭 Creativo' : '😄 Gracioso'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0">
+                    {selectedPunishments.includes(punishment) && (
+                      <div className="w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm">✓</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <p className="text-sm text-neutral-500 font-game mb-4">
+              Seleccionados: {selectedPunishments.length}/3
+            </p>
+            
+            <motion.button
+              onClick={submitPunishments}
+              disabled={selectedPunishments.length === 0}
+              className={`btn-primary w-full max-w-md mx-auto shine ${
+                selectedPunishments.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              whileHover={selectedPunishments.length > 0 ? { scale: 1.02, y: -2 } : {}}
+              whileTap={selectedPunishments.length > 0 ? { scale: 0.98 } : {}}
+            >
+              <span className="flex items-center justify-center gap-3">
+                <span className="text-2xl">🎯</span>
+                <span>Confirmar Castigos</span>
+              </span>
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
+    </div>
   );
 }
 

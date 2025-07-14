@@ -36,333 +36,219 @@ function Lobby() {
   ];
 
   return (
-    <div className="animated-bg flex flex-col items-center justify-center p-4 relative">
-      {/* Partículas flotantes mejoradas */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, index) => (
-          <motion.div
-            key={index}
-            className="absolute rounded-full backdrop-blur-sm"
-            animate={{
-              y: [0, -150, 0],
-              x: [0, Math.random() * 120 - 60, 0],
-              scale: [1, 1.3, 1],
-              rotate: [0, 360],
-              opacity: [0.3, 0.7, 0.3],
-            }}
-            transition={{
-              duration: 8 + Math.random() * 6,
-              repeat: Infinity,
-              delay: index * 0.4,
-              ease: "easeInOut"
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              width: `${20 + Math.random() * 40}px`,
-              height: `${20 + Math.random() * 40}px`,
-              background: `radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 70%, transparent 100%)`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Elementos decorativos de fondo */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(8)].map((_, index) => (
-          <motion.div
-            key={`emoji-${index}`}
-            className="absolute text-6xl opacity-10"
-            animate={{
-              y: [0, -30, 0],
-              rotate: [0, 180, 360],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 6 + Math.random() * 3,
-              repeat: Infinity,
-              delay: index * 1.2,
-            }}
-            style={{
-              left: `${5 + Math.random() * 90}%`,
-              top: `${5 + Math.random() * 90}%`,
-            }}
-          >
-            {['🎮', '🎯', '🎲', '🎊', '⭐', '🎈', '🎉', '🏆'][index]}
-          </motion.div>
-        ))}
-      </div>
-
-      <motion.div
-        className="w-full max-w-2xl relative z-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-4xl mx-auto">
         {/* Header de la sala */}
         <motion.div
-          className="text-center mb-10"
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 200, 
-            damping: 15,
-            delay: 0.2 
-          }}
+          className="text-center mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
         >
-          <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="mb-4"
+          <motion.h1 
+            className="text-4xl md:text-5xl font-display text-neutral-800 mb-2"
+            animate={{ scale: [1, 1.02, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
           >
-            <h2 className="text-display font-display text-white mb-3 text-shadow-lg tracking-wide">
-              🎯 Sala de Espera
-            </h2>
-            <div className="inline-flex items-center gap-4 bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/30">
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">🏠</span>
-                <span className="text-2xl font-game text-white font-bold tracking-wider">
-                  {gameState.roomCode}
-                </span>
-              </div>
-              <div className="w-px h-6 bg-white/30"></div>
-              <div className="flex items-center gap-2">
-                <span className="text-xl">👥</span>
-                <span className="text-lg font-game text-white/90">
-                  {gameState.players.length}/8 jugadores
-                </span>
-              </div>
-            </div>
-          </motion.div>
-          
-          <motion.p 
-            className="text-lg font-game text-white/80 tracking-wide"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            {gameState.players.length < 2 ? 
-              '¡Esperando más jugadores para comenzar!' : 
-              '¡Listos para la diversión! 🎉'
-            }
-          </motion.p>
+            🎮 Sala de Juego
+          </motion.h1>
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3 inline-block shadow-lg">
+            <p className="text-lg font-game text-neutral-600">
+              Código: <span className="font-bold text-primary-600 text-xl">{gameState.roomCode}</span>
+            </p>
+          </div>
         </motion.div>
 
-        {/* Lista de jugadores mejorada */}
-        <motion.div 
-          className="main-card p-8 space-y-6"
+        {/* Lista de jugadores */}
+        <motion.div
+          className="main-card mb-8"
           variants={container}
           initial="hidden"
           animate="show"
         >
-          <motion.h3 
-            className="text-2xl font-display text-neutral-800 text-center mb-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            🎪 Jugadores en la Sala
-          </motion.h3>
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-game font-bold text-neutral-800 mb-2">
+              Jugadores ({gameState.players?.length || 0}/8)
+            </h2>
+            <p className="text-neutral-600 font-game">
+              Esperando a que se unan más jugadores...
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <AnimatePresence mode="popLayout">
-              {gameState.players.map((player, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <AnimatePresence>
+              {gameState.players?.map((player, index) => (
                 <motion.div
                   key={player.id}
                   variants={item}
-                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: -20 }}
-                  transition={{ 
-                    type: "spring", 
-                    stiffness: 300, 
-                    damping: 20,
-                    delay: index * 0.1 
-                  }}
-                  className="player-card group"
+                  layout
+                  className="player-card group hover:scale-105 transition-all duration-300"
                 >
-                  <div className="relative">
-                    {/* Avatar del jugador */}
-                    <motion.div 
-                      className={`player-avatar bg-gradient-to-br ${playerAvatarColors[index % playerAvatarColors.length]} relative`}
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    >
-                      <span className="text-2xl font-display">
-                        {player.name.charAt(0).toUpperCase()}
-                      </span>
-                      
-                      {/* Indicador de anfitrión */}
-                      {index === 0 && (
-                        <motion.div 
-                          className="absolute -top-2 -right-2 w-8 h-8 bg-warning-400 rounded-full flex items-center justify-center border-2 border-white shadow-lg"
-                          animate={{ rotate: [0, 10, -10, 0] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                        >
-                          <span className="text-sm">👑</span>
-                        </motion.div>
-                      )}
-                    </motion.div>
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-game text-neutral-800 font-semibold truncate">
+                  <div className="flex items-center gap-4">
+                    {/* Avatar */}
+                    <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${playerAvatarColors[index % playerAvatarColors.length]} flex items-center justify-center text-white font-display text-lg shadow-md`}>
+                      {player.name.charAt(0).toUpperCase()}
+                    </div>
+                    
+                    {/* Info del jugador */}
+                    <div className="flex-1">
+                      <p className="font-game font-semibold text-neutral-800 text-lg">
                         {player.name}
-                      </span>
-                      {index === 0 && (
-                        <motion.span 
-                          className="text-xs bg-warning-100 text-warning-700 px-2 py-1 rounded-full font-game font-medium"
-                          animate={{ scale: [1, 1.05, 1] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                        >
-                          Anfitrión
-                        </motion.span>
-                      )}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        {index === 0 && (
+                          <span className="text-xs bg-warning-100 text-warning-700 px-2 py-1 rounded-full font-game font-semibold">
+                            👑 Host
+                          </span>
+                        )}
+                        <span className="text-xs text-neutral-500 font-game">
+                          Jugador #{index + 1}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <motion.div 
-                        className="w-2 h-2 bg-success-500 rounded-full"
-                        animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      />
-                      <span className="text-xs text-neutral-500 font-game">
-                        Conectado
-                      </span>
-                    </div>
-                  </div>
 
-                  {/* Número del jugador */}
-                  <motion.div 
-                    className="w-8 h-8 bg-neutral-100 rounded-full flex items-center justify-center text-neutral-600 font-game font-bold text-sm"
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    #{index + 1}
-                  </motion.div>
+                    {/* Estado de conexión */}
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="w-3 h-3 bg-success-400 rounded-full"
+                      title="Conectado"
+                    />
+                  </div>
                 </motion.div>
               ))}
             </AnimatePresence>
           </div>
 
           {/* Slots vacíos */}
-          {gameState.players.length < 8 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          {gameState.players && gameState.players.length < 8 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
               {[...Array(Math.min(3, 8 - gameState.players.length))].map((_, index) => (
                 <motion.div
                   key={`empty-${index}`}
-                  className="flex items-center gap-4 p-4 bg-neutral-50 border-2 border-dashed border-neutral-200 rounded-2xl opacity-60"
-                  animate={{ opacity: [0.6, 0.8, 0.6] }}
+                  className="border-2 border-dashed border-neutral-300 rounded-2xl p-4 flex items-center justify-center min-h-[80px]"
+                  animate={{ opacity: [0.3, 0.6, 0.3] }}
                   transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
                 >
-                  <div className="w-16 h-16 rounded-full bg-neutral-200 flex items-center justify-center">
-                    <span className="text-2xl">👤</span>
-                  </div>
-                  <div className="flex-1">
-                    <span className="text-neutral-400 font-game">
-                      Esperando jugador...
-                    </span>
+                  <div className="text-center text-neutral-400">
+                    <div className="text-2xl mb-1">👥</div>
+                    <p className="text-sm font-game">Esperando jugador...</p>
                   </div>
                 </motion.div>
               ))}
             </div>
           )}
+        </motion.div>
 
-          {/* Botón de inicio (solo para anfitrión) */}
-          {gameState.players[0]?.id === socket.id && (
-            <motion.div
-              className="pt-6 border-t border-neutral-200"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
+        {/* Botones de acción */}
+        <motion.div
+          className="text-center space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          {/* Botón iniciar juego (solo para host) */}
+          {gameState.players && gameState.players[0]?.id === socket?.id && (
+            <motion.button
+              onClick={startGame}
+              disabled={!gameState.players || gameState.players.length < 2}
+              className={`btn-primary w-full max-w-md mx-auto shine ${
+                (!gameState.players || gameState.players.length < 2) 
+                  ? 'opacity-50 cursor-not-allowed' 
+                  : ''
+              }`}
+              whileHover={
+                gameState.players && gameState.players.length >= 2 
+                  ? { scale: 1.02, y: -2 } 
+                  : {}
+              }
+              whileTap={
+                gameState.players && gameState.players.length >= 2 
+                  ? { scale: 0.98 } 
+                  : {}
+              }
             >
-              <motion.button
-                onClick={startGame}
-                disabled={gameState.players.length < 2}
-                className={`btn-success w-full relative overflow-hidden shine ${
-                  gameState.players.length < 2 ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-                whileHover={gameState.players.length >= 2 ? { scale: 1.02, y: -2 } : {}}
-                whileTap={gameState.players.length >= 2 ? { scale: 0.98, y: 0 } : {}}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >
-                <span className="relative z-10 flex items-center justify-center gap-3">
-                  <motion.span 
-                    className="text-2xl"
-                    animate={{ rotate: gameState.players.length >= 2 ? [0, 15, -15, 0] : 0 }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    🎲
-                  </motion.span>
-                  <span className="text-xl">
-                    {gameState.players.length < 2 ? 
-                      'Necesitas al menos 2 jugadores' : 
-                      '¡Iniciar Juego!'
-                    }
-                  </span>
-                </span>
-              </motion.button>
-              
-              {gameState.players.length < 2 && (
-                <motion.p 
-                  className="text-center text-sm text-neutral-500 font-game mt-3"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
+              <span className="flex items-center justify-center gap-3">
+                <motion.span 
+                  className="text-2xl"
+                  animate={{ 
+                    rotate: gameState.players && gameState.players.length >= 2 ? [0, 10, -10, 0] : 0 
+                  }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  Comparte el código <strong>{gameState.roomCode}</strong> con tus amigos
-                </motion.p>
-              )}
-            </motion.div>
+                  🚀
+                </motion.span>
+                <span>
+                  {(!gameState.players || gameState.players.length < 2) 
+                    ? 'Necesitas al menos 2 jugadores' 
+                    : 'Iniciar Juego'
+                  }
+                </span>
+              </span>
+            </motion.button>
           )}
 
-          {/* Información para jugadores no anfitriones */}
-          {gameState.players[0]?.id !== socket.id && (
-            <motion.div
-              className="text-center pt-6 border-t border-neutral-200"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-            >
-              <motion.div
-                animate={{ y: [0, -2, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <p className="text-neutral-600 font-game text-lg mb-2">
-                  🎮 Esperando que el anfitrión inicie el juego...
+          {/* Información para jugadores no-host */}
+          {gameState.players && gameState.players[0]?.id !== socket?.id && (
+            <div className="bg-primary-50 border-2 border-primary-200 rounded-2xl p-6 max-w-md mx-auto">
+              <div className="text-center">
+                <div className="text-3xl mb-2">⏳</div>
+                <p className="font-game font-semibold text-primary-700 mb-1">
+                  Esperando al host
                 </p>
-                <p className="text-sm text-neutral-500">
-                  ¡Ponte cómodo mientras llegan más jugadores!
+                <p className="text-sm text-primary-600 font-game">
+                  {gameState.players[0]?.name} iniciará el juego cuando esté listo
                 </p>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           )}
-        </motion.div>
 
-        {/* Footer con información del juego */}
-        <motion.div
-          className="text-center mt-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <div className="inline-flex items-center gap-4 text-white/70 font-game text-sm">
-            <span className="flex items-center gap-1">
-              <span>⏱️</span>
-              <span>15-30 min</span>
-            </span>
-            <span className="w-1 h-1 bg-white/50 rounded-full"></span>
-            <span className="flex items-center gap-1">
-              <span>🎯</span>
-              <span>Casual</span>
-            </span>
-            <span className="w-1 h-1 bg-white/50 rounded-full"></span>
-            <span className="flex items-center gap-1">
-              <span>🧠</span>
-              <span>Psicología</span>
-            </span>
+          {/* Información del juego */}
+          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 max-w-md mx-auto">
+            <div className="flex items-center justify-center gap-4 text-sm text-neutral-600 font-game">
+              <div className="flex items-center gap-1">
+                <span>👥</span>
+                <span>2-8 jugadores</span>
+              </div>
+              <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
+              <div className="flex items-center gap-1">
+                <span>⏱️</span>
+                <span>15-30 min</span>
+              </div>
+              <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
+              <div className="flex items-center gap-1">
+                <span>🧠</span>
+                <span>Creatividad</span>
+              </div>
+            </div>
           </div>
+
+          {/* Enlace para compartir */}
+          <motion.div
+            className="text-center mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            <p className="text-sm text-neutral-500 font-game mb-2">
+              Comparte este código con tus amigos:
+            </p>
+            <motion.div
+              className="bg-neutral-100 rounded-xl px-4 py-2 inline-block cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                navigator.clipboard.writeText(gameState.roomCode);
+                // Aquí podrías mostrar un toast de "copiado"
+              }}
+            >
+              <span className="font-mono text-lg font-bold text-neutral-700">
+                {gameState.roomCode}
+              </span>
+              <span className="ml-2 text-xs text-neutral-500">📋 Click para copiar</span>
+            </motion.div>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
     </div>
   );
 }

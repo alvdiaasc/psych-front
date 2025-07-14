@@ -21,64 +21,82 @@ function Punishments() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-primary via-accent to-secondary p-4"
-    >
-      <motion.div
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        className="mb-8 text-center"
-      >
-        <h2 className="text-display-sm font-display text-white mb-2">
-          ¡Hora del Castigo!
-        </h2>
-        <p className="text-xl text-white/90 font-game">
-          El ganador elige los castigos
-        </p>
-      </motion.div>
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-4xl mx-auto">
+        <motion.div
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="text-center mb-8"
+        >
+          <h1 className="text-4xl md:text-5xl font-display text-neutral-800 mb-4">
+            🎭 ¡Hora de los Castigos!
+          </h1>
+          <p className="text-xl font-game text-neutral-600">
+            El ganador ha elegido los siguientes castigos para los perdedores
+          </p>
+        </motion.div>
 
-      <motion.div 
-        className="w-full max-w-2xl bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-card"
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        <ul className="space-y-4">
-          {gameState.punishments.map((punishment) => (
-            <motion.li
-              key={punishment.id}
-              variants={item}
-              className="group bg-background-light rounded-xl p-6 border-2 border-background hover:border-primary transition-all"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <h3 className="text-xl font-game text-gray-800 mb-2">
-                    {gameState.players.find(player => player.id === punishment.playerId)?.name || 'Jugador desconocido'}
-                  </h3>
-                  <p className="text-gray-600 font-game">
-                    {punishment.text}
-                  </p>
+        <motion.div
+          className="main-card"
+          variants={container}
+          initial="hidden"
+          animate="show"
+        >
+          <div className="space-y-6">
+            {gameState.punishments && gameState.punishments.map((punishment, index) => (
+              <motion.div
+                key={index}
+                variants={item}
+                className="bg-gradient-to-r from-danger-50 to-warning-50 border-2 border-danger-200 rounded-2xl p-6"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="text-3xl">
+                    {punishment.type === 'physical' ? '🏃‍♂️' : 
+                     punishment.type === 'silly' ? '🤡' : 
+                     punishment.type === 'creative' ? '🎨' : '😂'}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-game font-bold text-neutral-800 mb-2">
+                      Castigo #{index + 1}
+                    </h3>
+                    <p className="text-neutral-700 font-game leading-relaxed">
+                      {punishment.text}
+                    </p>
+                    <div className="mt-2">
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-game font-semibold ${
+                        punishment.type === 'physical' ? 'bg-blue-100 text-blue-700' :
+                        punishment.type === 'silly' ? 'bg-purple-100 text-purple-700' :
+                        punishment.type === 'creative' ? 'bg-green-100 text-green-700' :
+                        'bg-orange-100 text-orange-700'
+                      }`}>
+                        {punishment.type === 'physical' ? '💪 Físico' :
+                         punishment.type === 'silly' ? '🤪 Divertido' :
+                         punishment.type === 'creative' ? '🎭 Creativo' : '😄 Gracioso'}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <motion.div
-                  className="ml-4"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <button
-                    onClick={() => selectPunishment(punishment.id)}
-                    className="bg-primary hover:bg-primary-dark text-white font-game px-6 py-3 rounded-xl shadow-game hover:shadow-game-hover transform hover:-translate-y-1 transition-all"
-                  >
-                    Elegir
-                  </button>
-                </motion.div>
-              </div>
-            </motion.li>
-          ))}
-        </ul>
-      </motion.div>
-    </motion.div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="text-center mt-8 p-6 bg-primary-50 border-2 border-primary-200 rounded-2xl"
+          >
+            <div className="text-3xl mb-3">⏰</div>
+            <p className="font-game font-bold text-primary-700 text-lg mb-2">
+              ¡A cumplir los castigos!
+            </p>
+            <p className="text-primary-600 font-game">
+              Tómense su tiempo para completar cada castigo. ¡Que sea divertido para todos!
+            </p>
+          </motion.div>
+        </motion.div>
+      </div>
+    </div>
   );
 }
 
