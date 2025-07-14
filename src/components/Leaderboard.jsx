@@ -19,23 +19,29 @@ function Leaderboard() {
   const sortedScores = gameState.scores ? [...Object.entries(gameState.scores)].sort((a, b) => b[1] - a[1]) : [];
   
   // Determinar las posiciones (considerando empates)
-  const rankedScores = sortedScores.map((score, idx) => {
+  const rankedScores = sortedScores.length > 0 ? sortedScores.map((score, idx) => {
     if (idx === 0) return { id: score[0], score: score[1], position: 1 };
     const prevScore = sortedScores[idx - 1];
-    const position = prevScore[1] === score[1] 
-      ? rankedScores[idx - 1].position 
-      : idx + 1;
+    // Calcular posición basada en scores anteriores
+    let position = idx + 1;
+    for (let i = idx - 1; i >= 0; i--) {
+      if (sortedScores[i][1] === score[1]) {
+        position = i + 1;
+      } else {
+        break;
+      }
+    }
     return { id: score[0], score: score[1], position };
-  });
+  }) : [];
 
   // Obtener datos del jugador para cada puntuación
-  const playersWithScores = rankedScores.map(scoreData => {
+  const playersWithScores = rankedScores.length > 0 ? rankedScores.map(scoreData => {
     const player = gameState.players?.find(p => p.id === scoreData.id);
     return {
       ...scoreData,
       name: player?.name || 'Jugador Desconocido'
     };
-  });
+  }) : [];
 
   // Emojis y colores para posiciones
   const positionConfig = {
