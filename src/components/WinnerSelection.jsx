@@ -17,11 +17,24 @@ function WinnerSelection() {
   };
 
   const submitPunishments = () => {
-    socket.emit('selectPunishments', {
-      roomCode: gameState.roomCode,
-      winnerId: gameState.winnerId,
-      selectedPunishments,
-    });
+    if (selectedPunishments.length === 0) {
+      // Si no hay castigos seleccionados, usar castigos por defecto
+      const defaultPunishments = gameState.availablePunishments?.slice(0, 2) || [
+        { text: "Hacer 10 flexiones", type: "physical" },
+        { text: "Cantar una canción", type: "silly" }
+      ];
+      socket.emit('selectPunishments', {
+        roomCode: gameState.roomCode,
+        winnerId: gameState.winnerId,
+        selectedPunishments: defaultPunishments,
+      });
+    } else {
+      socket.emit('selectPunishments', {
+        roomCode: gameState.roomCode,
+        winnerId: gameState.winnerId,
+        selectedPunishments,
+      });
+    }
   };
 
   return (
@@ -109,15 +122,14 @@ function WinnerSelection() {
             
             <motion.button
               onClick={submitPunishments}
-              disabled={selectedPunishments.length === 0}
-              className={`btn-primary w-full max-w-md mx-auto shine ${
-                selectedPunishments.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-              whileHover={selectedPunishments.length > 0 ? { scale: 1.02, y: -2 } : {}}
-              whileTap={selectedPunishments.length > 0 ? { scale: 0.98 } : {}}
+              className="btn-primary w-full max-w-md mx-auto shine"
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
             >
               <span className="flex items-center justify-center gap-3">
-                <span>Confirmar Castigos</span>
+                <span>
+                  {selectedPunishments.length === 0 ? 'Continuar sin Castigos' : 'Confirmar Castigos'}
+                </span>
               </span>
             </motion.button>
           </div>

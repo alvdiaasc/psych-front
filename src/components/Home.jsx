@@ -180,9 +180,7 @@ function Home() {
               Crea una sala para empezar o únete con un código
             </p>
             <div className="flex justify-center items-center gap-2 mt-2">
-              <span className="text-xs text-neutral-400">2-8 jugadores</span>
               <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
-              <span className="text-xs text-neutral-400">15-30 min</span>
             </div>
           </motion.div>
         </motion.div>
