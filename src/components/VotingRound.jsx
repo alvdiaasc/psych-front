@@ -143,7 +143,7 @@ function VotingRound() {
           transition={{ delay: 0.5 }}
         >
           <AnimatePresence mode="popLayout">
-            {gameState.answers.map((answer, index) => (
+            {gameState.answers && gameState.answers.map((answer, index) => (
               <motion.button
                 key={answer.id}
                 onClick={() => vote(answer.id)}

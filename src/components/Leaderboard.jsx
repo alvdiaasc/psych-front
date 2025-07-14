@@ -16,7 +16,7 @@ function Leaderboard() {
   };
 
   // Ordenar los scores de mayor a menor
-  const sortedScores = [...Object.entries(gameState.scores)].sort((a, b) => b[1] - a[1]);
+  const sortedScores = gameState.scores ? [...Object.entries(gameState.scores)].sort((a, b) => b[1] - a[1]) : [];
   
   // Determinar las posiciones (considerando empates)
   const rankedScores = sortedScores.map((score, idx) => {
@@ -30,7 +30,7 @@ function Leaderboard() {
 
   // Obtener datos del jugador para cada puntuación
   const playersWithScores = rankedScores.map(scoreData => {
-    const player = gameState.players.find(p => p.id === scoreData.id);
+    const player = gameState.players?.find(p => p.id === scoreData.id);
     return {
       ...scoreData,
       name: player?.name || 'Jugador Desconocido'

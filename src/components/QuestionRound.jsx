@@ -151,7 +151,7 @@ function QuestionRound() {
             🤔
           </motion.div>
           <h2 className="text-2xl md:text-3xl font-game font-bold text-neutral-800 leading-relaxed">
-            {gameState.question?.text || gameState.question}
+            {gameState.question?.text || 'Cargando pregunta...'}
           </h2>
         </motion.div>
 

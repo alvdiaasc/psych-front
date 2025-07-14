@@ -31,59 +31,7 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-400 via-secondary-400 to-accent-400 flex flex-col items-center justify-center p-4 relative">
-      {/* Elementos decorativos sutiles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, index) => (
-          <motion.div
-            key={index}
-            className="absolute w-20 h-20 bg-white/10 rounded-full backdrop-blur-sm"
-            animate={{
-              y: [0, -30, 0],
-              x: [0, Math.random() * 50 - 25, 0],
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.6, 0.3],
-            }}
-            transition={{
-              duration: 8 + Math.random() * 4,
-              repeat: Infinity,
-              delay: index * 1,
-              ease: "easeInOut"
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Elementos de fondo adicionales */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(4)].map((_, index) => (
-          <motion.div
-            key={`star-${index}`}
-            className="absolute text-2xl opacity-20"
-            animate={{
-              y: [0, -15, 0],
-              rotate: [0, 180, 360],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: 6 + Math.random() * 2,
-              repeat: Infinity,
-              delay: index * 1.5,
-            }}
-            style={{
-              left: `${20 + Math.random() * 60}%`,
-              top: `${20 + Math.random() * 60}%`,
-            }}
-          >
-            {index % 2 === 0 ? '⭐' : '🎈'}
-          </motion.div>
-        ))}
-      </div>
-
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 flex flex-col items-center justify-center p-4 relative">
       {/* Contenido principal */}
       <motion.div
         className="w-full max-w-md relative z-10"
@@ -104,7 +52,7 @@ function Home() {
           }}
         >
           <motion.h1 
-            className="text-display-lg font-display text-white mb-4 text-shadow-lg tracking-wide"
+            className="text-4xl md:text-5xl font-display text-neutral-800 mb-4 tracking-wide"
             animate={{ 
               y: [0, -8, 0],
             }}
@@ -117,7 +65,7 @@ function Home() {
             🧠 PSYCH!
           </motion.h1>
           <motion.p 
-            className="text-xl font-game text-white/90 tracking-wide"
+            className="text-xl font-game text-neutral-600 tracking-wide"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -269,7 +217,7 @@ function Home() {
           transition={{ delay: 1.1 }}
         >
           <motion.div
-            className="inline-flex items-center gap-2 text-white/80 font-game text-sm"
+            className="inline-flex items-center gap-2 text-neutral-500 font-game text-sm"
             animate={{ y: [0, -2, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
