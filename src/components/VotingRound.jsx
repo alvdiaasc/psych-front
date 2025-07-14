@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { GameContext } from '../context/GameContext';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function VotingRound() {
   const { gameState, socket } = useContext(GameContext);
@@ -31,47 +31,112 @@ function VotingRound() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-accent via-primary to-secondary p-4"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-primary-light via-accent-light to-secondary-light p-4 relative overflow-hidden"
     >
-      <div className="text-center mb-8">
-        <h2 className="text-display-sm font-display text-white mb-4">
-          ¡Hora de votar!
-        </h2>
-        <motion.div
-          className="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-card inline-block"
-          whileHover={{ scale: 1.02 }}
-        >
-          <p className="text-xl font-game text-gray-800">
-            {gameState.question.text}
-          </p>
-        </motion.div>
+      {/* Partículas flotantes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-24 h-24 bg-white/5 rounded-full backdrop-blur-sm"
+            animate={{
+              y: [0, -200, 0],
+              x: [0, Math.random() * 80 - 40, 0],
+              scale: [1, 1.2, 1],
+              rotate: [0, 360],
+            }}
+            transition={{
+              duration: 8 + Math.random() * 4,
+              repeat: Infinity,
+              delay: i * 0.5,
+            }}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+          />
+        ))}
       </div>
 
       <motion.div
-        className="w-full max-w-2xl bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-card"
-        variants={container}
-        initial="hidden"
-        animate="show"
+        className="w-full max-w-3xl space-y-8 relative z-10"
+        initial={{ scale: 0.95 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
       >
-        <ul className="space-y-4">
-          {gameState.answers.map((answer) => (
-            <motion.li key={answer.id} variants={item} className="group">
+        {/* Temporizador */}
+        <motion.div 
+          className="flex justify-center mb-4"
+          animate={{ scale: gameState.timeLeft <= 10 ? [1, 1.1, 1] : 1 }}
+          transition={{ duration: 0.5, repeat: gameState.timeLeft <= 10 ? Infinity : 0 }}
+        >
+          <div className={`px-6 py-2 rounded-full font-game text-2xl ${
+            gameState.timeLeft <= 10 ? 'bg-primary text-white' : 'bg-white/90 text-gray-800'
+          } shadow-lg`}>
+            ⏱️ {gameState.timeLeft}s
+          </div>
+        </motion.div>
+
+        {/* Pregunta */}
+        <div className="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-card">
+          <motion.h2 
+            className="text-display-sm font-display text-gray-800 text-center mb-2"
+            animate={{ y: [0, -5, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            ¡Hora de votar!
+          </motion.h2>
+          <p className="text-xl font-game text-gray-600 text-center">
+            {gameState.question.text}
+          </p>
+        </div>
+
+        {/* Grid de respuestas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <AnimatePresence mode="popLayout">
+            {gameState.answers.map((answer, index) => (
               <motion.button
+                key={answer.id}
                 onClick={() => vote(answer.id)}
-                className="w-full p-6 bg-background-light rounded-xl border-2 border-background hover:border-accent transition-all text-left flex items-center justify-between"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                className={`group p-6 rounded-xl shadow-game transition-all transform ${
+                  gameState.hasVoted 
+                    ? 'bg-gray-100 cursor-not-allowed'
+                    : 'bg-white hover:shadow-game-hover hover:-translate-y-1'
+                } relative overflow-hidden`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={!gameState.hasVoted ? { scale: 1.02 } : {}}
+                whileTap={!gameState.hasVoted ? { scale: 0.98 } : {}}
               >
-                <span className="text-xl font-game text-gray-800 flex-1">
-                  {answer.text}
-                </span>
-                <span className="ml-4 bg-accent text-white px-4 py-2 rounded-lg font-game opacity-0 group-hover:opacity-100 transition-opacity">
-                  ¡Votar!
-                </span>
+                <div className="relative z-10">
+                  <p className="font-game text-lg text-gray-800 mb-2">
+                    {answer.playerName}
+                  </p>
+                  <p className="text-gray-600">
+                    {answer.text}
+                  </p>
+                </div>
+                {!gameState.hasVoted && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent-light/20 to-primary-light/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                )}
               </motion.button>
-            </motion.li>
-          ))}
-        </ul>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {gameState.hasVoted && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <p className="text-white text-xl font-game tracking-wide">
+              ¡Voto registrado! Esperando al resto de jugadores...
+            </p>
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
   );

@@ -15,89 +15,140 @@ function Leaderboard() {
     socket.emit('playerReady', { roomCode: gameState.roomCode });
   };
 
+  // Ordenar los scores de mayor a menor
+  const sortedScores = [...Object.entries(gameState.scores)].sort((a, b) => b[1] - a[1]);
+  
+  // Determinar las posiciones (considerando empates)
+  const rankedScores = sortedScores.map((score, idx) => {
+    if (idx === 0) return { id: score[0], score: score[1], position: 1 };
+    const prevScore = sortedScores[idx - 1];
+    const position = prevScore[1] === score[1] 
+      ? rankedScores[idx - 1].position 
+      : idx + 1;
+    return { id: score[0], score: score[1], position };
+  });
+
+  // Emojis para los primeros lugares
+  const positionEmojis = {
+    1: '👑',
+    2: '🥈',
+    3: '🥉'
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-vibrantGreen to-secondary text-white"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-secondary-light via-primary-light to-accent-light p-4 relative overflow-hidden"
     >
-      <h2 className="text-4xl font-bold mb-8 font-cabinSketch">Tabla de Puntuación</h2>
-      <div className="w-full max-w-lg bg-neutral text-black p-8 rounded-xl shadow-intense">
-        <ul className="space-y-6">
-          {Object.entries(gameState.scores)
-            .sort(([, a], [, b]) => b - a)
-            .map(([playerId, score], index) => (
-              <li
-                key={playerId}
-                className="flex items-center justify-between py-4 px-6 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
-              >
-                <span className="text-lg font-medium text-dark">{index + 1}. {gameState.players.find(p => p.id === playerId)?.name}</span>
-                <span className="text-lg font-bold text-primary">{score} pts</span>
-              </li>
-            ))}
-        </ul>
+      {/* Confeti animado */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-4 h-4"
+            animate={{
+              y: [-20, window.innerHeight + 20],
+              x: [
+                Math.random() * window.innerWidth,
+                Math.random() * window.innerWidth + (Math.random() * 200 - 100)
+              ],
+              rotate: [0, 360 * (Math.random() > 0.5 ? 1 : -1)],
+            }}
+            transition={{
+              duration: 5 + Math.random() * 3,
+              repeat: Infinity,
+              delay: i * 0.3,
+              ease: "linear",
+            }}
+          >
+            <div 
+              className="w-full h-full transform rotate-45"
+              style={{
+                backgroundColor: ['#FFD700', '#FF69B4', '#7FFF00', '#00BFFF'][i % 4],
+              }}
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      <motion.div
+        className="w-full max-w-2xl space-y-8 relative z-10"
+        initial={{ scale: 0.9 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+      >
+        <motion.h2
+          className="text-display font-display text-white text-center drop-shadow-lg tracking-wide mb-8"
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          ¡Tabla de Posiciones!
+        </motion.h2>
+
+        <div className="space-y-4">
+          {rankedScores.map((player, index) => (
+            <motion.div
+              key={player.id}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className={`bg-white/95 backdrop-blur-md rounded-xl p-4 shadow-card transform transition-all ${
+                player.position <= 3 ? 'scale-105' : ''
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 flex items-center justify-center rounded-full font-game text-2xl ${
+                    player.position === 1 
+                      ? 'bg-yellow-400 text-white' 
+                      : player.position === 2
+                      ? 'bg-gray-300 text-gray-800'
+                      : player.position === 3
+                      ? 'bg-amber-600 text-white'
+                      : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {positionEmojis[player.position] || player.position}
+                  </div>
+                  <div>
+                    <h3 className="font-game text-xl text-gray-800">
+                      {gameState.players.find(p => p.id === player.id)?.name}
+                    </h3>
+                    <p className="text-gray-500 font-sans">
+                      Ronda {player.round}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <motion.div
+                    className="font-game text-2xl text-primary"
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    {player.score}
+                  </motion.div>
+                  <span className="text-gray-400 font-game">pts</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
         {/* Botón animado de volver al inicio */}
         <motion.button
           onClick={playAgain}
-          className="w-full bg-secondary text-black py-4 rounded-xl shadow-vibrant hover:bg-yellow-400"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+          className="group w-full bg-gradient-to-br from-accent to-accent-dark text-white font-game text-xl py-4 rounded-xl shadow-game hover:shadow-game-hover transform hover:-translate-y-1 transition-all relative overflow-hidden mt-8"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          Volver a Jugar
+          <span className="relative z-10 flex items-center justify-center gap-2">
+            <span className="text-2xl">🎮</span>
+            <span className="tracking-wide">¡Siguiente Ronda!</span>
+          </span>
+          <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
         </motion.button>
-      </div>
-      {/* Mostrar botón siguiente ronda si no es la última ronda */}
-      {!isLastRound && (
-        <button
-          onClick={handleReady}
-          className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 mb-2"
-          disabled={gameState.ready && gameState.ready.includes(socket.id)}
-        >
-          Siguiente ronda
-        </button>
-      )}
-      {/* Mostrar botón play again solo al host si es la última ronda */}
-      {isLastRound && gameState.players[0]?.id === socket.id && (
-        <button
-          onClick={playAgain}
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        >
-          Play Again
-        </button>
-      )}
-      {/* Mostrar cuántos están listos */}
-      {gameState.ready && !isLastRound && (
-        <div className="text-center text-sm text-gray-500 mt-2">
-          Listos: {gameState.ready.length || 0} / {gameState.players.length}
-        </div>
-      )}
-      {/* Mostrar tabla de votos */}
-      {gameState.votes && Object.keys(gameState.votes).length > 0 && (
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Votos de la ronda</h3>
-          <table className="w-full text-sm">
-            <thead>
-              <tr>
-                <th className="text-left">Jugador</th>
-                <th className="text-left">Votó por</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(gameState.votes).map(([voterId, answerId]) => {
-                const voter = gameState.players.find(p => p.id === voterId);
-                const answer = gameState.answers.find(a => a.id === answerId);
-                const votedPlayer = answer ? gameState.players.find(p => p.id === answer.playerId) : null;
-                return (
-                  <tr key={voterId}>
-                    <td>{voter ? voter.name : voterId}</td>
-                    <td>{votedPlayer ? votedPlayer.name : (answer ? answer.text : '—')}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
+      </motion.div>
     </motion.div>
   );
 }
