@@ -5,6 +5,8 @@ import Lobby from './components/Lobby';
 import QuestionRound from './components/QuestionRound';
 import VotingRound from './components/VotingRound';
 import Leaderboard from './components/Leaderboard';
+import Punishments from './components/Punishments';
+import WinnerSelection from './components/WinnerSelection';
 
 function App() {
   const { gameState } = useContext(GameContext);
@@ -16,6 +18,8 @@ function App() {
       {gameState.phase === 'question' && <QuestionRound />}
       {gameState.phase === 'voting' && <VotingRound />}
       {gameState.phase === 'leaderboard' && <Leaderboard />}
+      {gameState.phase === 'winnerSelection' && <WinnerSelection />}
+      {gameState.phase === 'punishments' && <Punishments />}
     </div>
   );
 }
