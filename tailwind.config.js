@@ -1,31 +1,69 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   theme: {
     extend: {
       colors: {
-        primary: '#FF6F61',
-        secondary: '#FFD700',
-        accent: '#FF1493',
-        neutral: '#F5F5F5',
-        dark: '#333333',
-        vibrantGreen: '#4CAF50',
-        vibrantBlue: '#00BFFF',
-        vibrantPurple: '#8A2BE2',
+        primary: {
+          light: '#FF8A80',
+          DEFAULT: '#FF5252',
+          dark: '#FF1744',
+        },
+        secondary: {
+          light: '#FFE57F',
+          DEFAULT: '#FFD740',
+          dark: '#FFC400',
+        },
+        accent: {
+          light: '#B388FF',
+          DEFAULT: '#7C4DFF',
+          dark: '#651FFF',
+        },
+        success: {
+          light: '#69F0AE',
+          DEFAULT: '#00E676',
+          dark: '#00C853',
+        },
+        background: {
+          light: '#F8F9FA',
+          DEFAULT: '#F1F3F5',
+          dark: '#E9ECEF',
+        }
       },
       fontFamily: {
-        cabinSketch: ['Cabin Sketch', 'cursive'],
-        openSans: ['Open Sans', 'sans-serif'],
+        sans: ['Open Sans', ...defaultTheme.fontFamily.sans],
+        display: ['Cabin Sketch', 'cursive'],
+        game: ['Fredoka One', 'cursive'],
       },
       boxShadow: {
-        vibrant: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        intense: '0 6px 10px rgba(0, 0, 0, 0.15)',
+        'game': '0 4px 0 0 rgba(0, 0, 0, 0.2)',
+        'game-hover': '0 6px 0 0 rgba(0, 0, 0, 0.2)',
+        'card': '0 8px 16px rgba(0, 0, 0, 0.1)',
+      },
+      animation: {
+        'bounce-soft': 'bounce-soft 1s infinite',
+        'float': 'float 3s ease-in-out infinite',
+      },
+      keyframes: {
+        'bounce-soft': {
+          '0%, 100%': { transform: 'translateY(-5%)' },
+          '50%': { transform: 'translateY(0)' },
+        },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        }
       },
       borderRadius: {
-        xl: '1rem',
+        'xl': '1rem',
+        '2xl': '1.5rem',
       },
-      transitionTimingFunction: {
-        smooth: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      fontSize: {
+        'display-lg': ['4rem', { lineHeight: '1.1' }],
+        'display': ['3rem', { lineHeight: '1.2' }],
+        'display-sm': ['2.5rem', { lineHeight: '1.3' }],
       },
     },
   },
