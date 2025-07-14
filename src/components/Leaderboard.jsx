@@ -19,28 +19,28 @@ function Leaderboard() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-green-500 to-teal-500 text-white"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-vibrantGreen to-secondary text-white"
     >
-      <h2 className="text-3xl font-bold mb-6 font-cabin-sketch">Tabla de Puntuación</h2>
-      <div className="w-full max-w-md bg-white text-black p-6 rounded-lg shadow-lg">
-        <ul className="space-y-4">
+      <h2 className="text-4xl font-bold mb-8 font-cabinSketch">Tabla de Puntuación</h2>
+      <div className="w-full max-w-lg bg-neutral text-black p-8 rounded-xl shadow-intense">
+        <ul className="space-y-6">
           {Object.entries(gameState.scores)
             .sort(([, a], [, b]) => b - a)
             .map(([playerId, score], index) => (
               <li
                 key={playerId}
-                className="flex items-center justify-between py-2 border-b border-gray-300"
+                className="flex items-center justify-between py-4 px-6 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
               >
-                <span className="text-lg font-medium">{index + 1}. {gameState.players.find(p => p.id === playerId)?.name}</span>
-                <span className="text-lg font-bold text-green-500">{score} pts</span>
+                <span className="text-lg font-medium text-dark">{index + 1}. {gameState.players.find(p => p.id === playerId)?.name}</span>
+                <span className="text-lg font-bold text-primary">{score} pts</span>
               </li>
             ))}
         </ul>
         {/* Botón animado de volver al inicio */}
         <motion.button
           onClick={playAgain}
-          className="w-full bg-yellow-500 text-black py-3 rounded-lg shadow-lg hover:bg-yellow-400 mt-4"
-          whileHover={{ scale: 1.05 }}
+          className="w-full bg-secondary text-black py-4 rounded-xl shadow-vibrant hover:bg-yellow-400"
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
           Volver a Jugar

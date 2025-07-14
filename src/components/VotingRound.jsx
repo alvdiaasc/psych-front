@@ -16,20 +16,20 @@ function VotingRound() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-pink-500 to-red-500 text-white"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-accent to-vibrantPurple text-white"
     >
-      <h2 className="text-3xl font-bold mb-6 font-cabin-sketch">Vota por la mejor respuesta:</h2>
-      <div className="w-full max-w-md bg-white text-black p-6 rounded-lg shadow-lg">
-        <ul className="mb-4">
+      <h2 className="text-4xl font-bold mb-8 font-cabinSketch">Vota por la mejor respuesta:</h2>
+      <div className="w-full max-w-lg bg-neutral text-black p-8 rounded-xl shadow-intense">
+        <ul className="space-y-6">
           {gameState.answers.map((answer) => (
             <li
               key={answer.id}
-              className="flex items-center justify-between py-2 border-b border-gray-300"
+              className="flex items-center justify-between py-4 px-6 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
             >
-              <span className="text-lg font-medium">{answer.text}</span>
+              <span className="text-lg font-medium text-dark">{answer.text}</span>
               <motion.button
                 onClick={() => vote(answer.id)}
-                className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-lg hover:bg-blue-400"
+                className="bg-primary text-white py-2 px-6 rounded-lg shadow-vibrant hover:bg-red-400"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >

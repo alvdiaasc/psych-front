@@ -28,16 +28,16 @@ function Home() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-green-500 text-white"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-primary to-vibrantBlue text-white"
     >
-      <h1 className="text-4xl font-bold mb-6 font-cabin-sketch">¡Bienvenido a Psych!</h1>
-      <div className="flex flex-col gap-4 w-full max-w-md">
+      <h1 className="text-5xl font-bold mb-8 font-cabinSketch">¡Bienvenido a Psych!</h1>
+      <div className="flex flex-col gap-6 w-full max-w-lg">
         <motion.input
           type="text"
           value={playerName}
           onChange={(e) => setPlayerName(e.target.value)}
           placeholder="Tu nombre..."
-          className="w-full p-3 rounded-lg border border-gray-300 text-black focus:ring-2 focus:ring-blue-500"
+          className="w-full p-4 rounded-xl border border-neutral text-black focus:ring-2 focus:ring-primary"
           whileFocus={{ scale: 1.05 }}
         />
         <motion.input
@@ -45,12 +45,12 @@ function Home() {
           value={roomCode}
           onChange={(e) => setRoomCode(e.target.value)}
           placeholder="Código de sala..."
-          className="w-full p-3 rounded-lg border border-gray-300 text-black focus:ring-2 focus:ring-pink-500"
+          className="w-full p-4 rounded-xl border border-neutral text-black focus:ring-2 focus:ring-accent"
           whileFocus={{ scale: 1.05 }}
         />
         <motion.button
           onClick={createRoom}
-          className="w-full bg-yellow-500 text-black py-3 rounded-lg shadow-lg hover:bg-yellow-400"
+          className="w-full bg-secondary text-black py-4 rounded-xl shadow-vibrant hover:bg-yellow-400"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -58,7 +58,7 @@ function Home() {
         </motion.button>
         <motion.button
           onClick={joinRoom}
-          className="w-full bg-pink-500 text-white py-3 rounded-lg shadow-lg hover:bg-pink-400"
+          className="w-full bg-accent text-white py-4 rounded-xl shadow-vibrant hover:bg-pink-400"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >

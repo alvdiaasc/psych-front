@@ -11,26 +11,27 @@ function Punishments() {
       animate={{ opacity: 1 }}
       className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
     >
-      <h2 className="text-3xl font-bold mb-6 font-cabin-sketch">Elige un castigo:</h2>
-      <div className="w-full max-w-md bg-white text-black p-6 rounded-lg shadow-lg">
-        <ul className="mb-4">
+      <h2 className="text-4xl font-bold mb-8 font-cabin-sketch text-center">Elige un castigo:</h2>
+      <div className="w-full max-w-lg bg-white text-black p-8 rounded-lg shadow-xl">
+        <ul className="space-y-6">
           {gameState.punishments.map((punishment) => (
-            <li
+            <motion.li
               key={punishment.id}
-              className="flex items-center justify-between py-2 border-b border-gray-300"
+              className="flex items-center justify-between py-4 px-6 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"
+              whileHover={{ scale: 1.05 }}
             >
-              <span className="text-lg font-medium">
+              <span className="text-lg font-semibold text-purple-700">
                 {gameState.players.find(player => player.id === punishment.playerId)?.name || 'Jugador desconocido'}:
               </span>
               <motion.button
                 onClick={() => selectPunishment(punishment.id)}
-                className="bg-red-500 text-white py-2 px-4 rounded-lg shadow-lg hover:bg-red-400"
+                className="bg-red-500 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-red-400"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Seleccionar
               </motion.button>
-            </li>
+            </motion.li>
           ))}
         </ul>
       </div>

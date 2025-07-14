@@ -40,11 +40,11 @@ function QuestionRound() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-yellow-500 to-orange-500 text-white"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-secondary to-vibrantGreen text-white"
     >
-      <h2 className="text-3xl font-bold mb-6 font-cabin-sketch">Pregunta:</h2>
-      <p className="text-xl mb-6 bg-white text-black p-4 rounded-lg shadow-lg">{gameState.question.text}</p>
-      <div className="w-full max-w-md">
+      <h2 className="text-4xl font-bold mb-8 font-cabinSketch">Pregunta:</h2>
+      <p className="text-xl mb-8 bg-neutral text-black p-6 rounded-xl shadow-intense">{gameState.question.text}</p>
+      <div className="w-full max-w-lg">
         {/* Mostrar el temporizador */}
         {remainingTime !== null && (
           <p className="text-red-500 font-bold mb-4">Tiempo restante: {remainingTime} segundos</p>
@@ -55,12 +55,12 @@ function QuestionRound() {
           placeholder="Tu respuesta..."
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
-          className="w-full p-3 rounded-lg border border-gray-300 text-black mb-4 focus:ring-2 focus:ring-blue-500"
+          className="w-full p-4 rounded-xl border border-neutral text-black focus:ring-2 focus:ring-primary mb-4"
           whileFocus={{ scale: 1.05 }}
         />
         <motion.button
           onClick={submitAnswer}
-          className="w-full bg-blue-500 text-white py-3 rounded-lg shadow-lg hover:bg-blue-400 transition-transform transform hover:scale-105"
+          className="w-full bg-primary text-white py-4 rounded-xl shadow-vibrant hover:bg-red-400 transition-transform transform hover:scale-105"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
