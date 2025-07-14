@@ -82,24 +82,26 @@ function QuestionRound() {
         className="w-full max-w-2xl relative z-10"
       >
         <div className="text-center mb-8">
-          <AnimatePresence>
-            {showWarning && (
-              <motion.div
-                initial={{ scale: 1.2, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                className="mb-4"
-              >
-                <div className={`text-2xl font-game inline-block px-6 py-2 rounded-full ${
-                  remainingTime <= 10 ? 'bg-primary text-white' : 'bg-white/90 text-gray-800'
-                } shadow-lg`}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                  <span>⏱️</span>
-                  <span>{remainingTime} segundos</span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {gameState.phase === 'question' && (
+            <AnimatePresence>
+              {showWarning && (
+                <motion.div
+                  initial={{ scale: 1.2, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  className="mb-4"
+                >
+                  <div className={`text-2xl font-game inline-block px-6 py-2 rounded-full ${
+                    remainingTime <= 10 ? 'bg-primary text-white' : 'bg-white/90 text-gray-800'
+                  } shadow-lg`}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <span>⏱️</span>
+                    <span>{remainingTime} segundos</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
 
           <motion.h2 
             className="text-display-sm font-display text-white mb-6 drop-shadow-lg tracking-wide"

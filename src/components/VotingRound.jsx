@@ -94,7 +94,7 @@ function VotingRound() {
         {/* Grid de respuestas */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <AnimatePresence mode="popLayout">
-            {gameState.answers.map((answer, index) => (
+            {gameState.answers.map((answer, i) => (
               <motion.button
                 key={answer.id}
                 onClick={() => vote(answer.id)}
@@ -106,7 +106,7 @@ function VotingRound() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: i * 0.1 }}
                 whileHover={!gameState.hasVoted ? { scale: 1.02 } : {}}
                 whileTap={!gameState.hasVoted ? { scale: 0.98 } : {}}
               >
