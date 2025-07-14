@@ -92,8 +92,10 @@ function QuestionRound() {
               >
                 <div className={`text-2xl font-game inline-block px-6 py-2 rounded-full ${
                   remainingTime <= 10 ? 'bg-primary text-white' : 'bg-white/90 text-gray-800'
-                } shadow-lg`}>
-                  ⏱️ {remainingTime} segundos
+                } shadow-lg`}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                  <span>⏱️</span>
+                  <span>{remainingTime} segundos</span>
                 </div>
               </motion.div>
             )}
