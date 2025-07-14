@@ -40,33 +40,33 @@ function QuestionRound() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-yellow-500 to-orange-500 text-white"
     >
-      <h2 className="text-xl font-bold mb-2">Ronda {gameState.round + 1} de {gameState.totalRounds}</h2>
-      {gameState.targetPlayer && (
-        <p className="mb-2 text-gray-700 font-semibold">Pregunta para: <span className="text-blue-600">{gameState.targetPlayer.name}</span></p>
-      )}
-      <h3 className="text-lg font-bold mb-4">Pregunta</h3>
-      <p className="mb-4">{gameState.question.text}</p>
+      <h2 className="text-3xl font-bold mb-6 font-cabin-sketch">Pregunta:</h2>
+      <p className="text-xl mb-6 bg-white text-black p-4 rounded-lg shadow-lg">{gameState.question.text}</p>
+      <div className="w-full max-w-md">
+        {/* Mostrar el temporizador */}
+        {remainingTime !== null && (
+          <p className="text-red-500 font-bold mb-4">Tiempo restante: {remainingTime} segundos</p>
+        )}
 
-      {/* Mostrar el temporizador */}
-      {remainingTime !== null && (
-        <p className="text-red-500 font-bold mb-4">Tiempo restante: {remainingTime} segundos</p>
-      )}
-
-      <input
-        type="text"
-        placeholder="Tu respuesta..."
-        value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
-        className="w-full p-2 border rounded mb-4"
-      />
-      <button
-        onClick={submitAnswer}
-        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-      >
-        Enviar respuesta
-      </button>
+        <motion.input
+          type="text"
+          placeholder="Tu respuesta..."
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+          className="w-full p-3 rounded-lg border border-gray-300 text-black mb-4 focus:ring-2 focus:ring-blue-500"
+          whileFocus={{ scale: 1.05 }}
+        />
+        <motion.button
+          onClick={submitAnswer}
+          className="w-full bg-blue-500 text-white py-3 rounded-lg shadow-lg hover:bg-blue-400 transition-transform transform hover:scale-105"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Enviar respuesta
+        </motion.button>
+      </div>
     </motion.div>
   );
 }

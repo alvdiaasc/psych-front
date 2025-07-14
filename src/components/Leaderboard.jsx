@@ -19,27 +19,33 @@ function Leaderboard() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-green-500 to-teal-500 text-white"
     >
-      <h2 className="text-2xl font-bold mb-4">Leaderboard</h2>
-      <table className="w-full mb-4">
-        <thead>
-          <tr>
-            <th className="text-left">Player</th>
-            <th className="text-right">Score</th>
-          </tr>
-        </thead>
-        <tbody>
+      <h2 className="text-3xl font-bold mb-6 font-cabin-sketch">Tabla de Puntuación</h2>
+      <div className="w-full max-w-md bg-white text-black p-6 rounded-lg shadow-lg">
+        <ul className="space-y-4">
           {Object.entries(gameState.scores)
             .sort(([, a], [, b]) => b - a)
-            .map(([playerId, score]) => (
-              <tr key={playerId} className={playerId === socket.id ? 'font-bold text-blue-600' : ''}>
-                <td>{gameState.players.find(p => p.id === playerId)?.name}</td>
-                <td className="text-right">{score}</td>
-              </tr>
+            .map(([playerId, score], index) => (
+              <li
+                key={playerId}
+                className="flex items-center justify-between py-2 border-b border-gray-300"
+              >
+                <span className="text-lg font-medium">{index + 1}. {gameState.players.find(p => p.id === playerId)?.name}</span>
+                <span className="text-lg font-bold text-green-500">{score} pts</span>
+              </li>
             ))}
-        </tbody>
-      </table>
+        </ul>
+        {/* Botón animado de volver al inicio */}
+        <motion.button
+          onClick={playAgain}
+          className="w-full bg-yellow-500 text-black py-3 rounded-lg shadow-lg hover:bg-yellow-400 mt-4"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Volver a Jugar
+        </motion.button>
+      </div>
       {/* Mostrar botón siguiente ronda si no es la última ronda */}
       {!isLastRound && (
         <button

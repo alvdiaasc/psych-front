@@ -28,39 +28,42 @@ function Home() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-green-500 text-white"
     >
-      <h1 className="text-3xl font-bold mb-6 text-center">Psych! Clone</h1>
-      <div className="space-y-4">
-        <input
+      <h1 className="text-4xl font-bold mb-6 font-cabin-sketch">¡Bienvenido a Psych!</h1>
+      <div className="flex flex-col gap-4 w-full max-w-md">
+        <motion.input
           type="text"
-          placeholder="Your name"
           value={playerName}
           onChange={(e) => setPlayerName(e.target.value)}
-          className="w-full p-2 border rounded"
+          placeholder="Tu nombre..."
+          className="w-full p-3 rounded-lg border border-gray-300 text-black focus:ring-2 focus:ring-blue-500"
+          whileFocus={{ scale: 1.05 }}
         />
-        <button
+        <motion.input
+          type="text"
+          value={roomCode}
+          onChange={(e) => setRoomCode(e.target.value)}
+          placeholder="Código de sala..."
+          className="w-full p-3 rounded-lg border border-gray-300 text-black focus:ring-2 focus:ring-pink-500"
+          whileFocus={{ scale: 1.05 }}
+        />
+        <motion.button
           onClick={createRoom}
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className="w-full bg-yellow-500 text-black py-3 rounded-lg shadow-lg hover:bg-yellow-400"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
         >
-          Create Room
-        </button>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Room code"
-            value={roomCode}
-            onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-            className="flex-1 p-2 border rounded"
-          />
-          <button
-            onClick={joinRoom}
-            className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
-            disabled={!socket}
-          >
-            Join
-          </button>
-        </div>
+          Crear Sala
+        </motion.button>
+        <motion.button
+          onClick={joinRoom}
+          className="w-full bg-pink-500 text-white py-3 rounded-lg shadow-lg hover:bg-pink-400"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Unirse con Código
+        </motion.button>
       </div>
     </motion.div>
   );

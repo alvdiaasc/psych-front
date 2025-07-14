@@ -16,24 +16,28 @@ function VotingRound() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg"
+      className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-pink-500 to-red-500 text-white"
     >
-      <h2 className="text-xl font-bold mb-2">Ronda {gameState.round + 1} de {gameState.totalRounds}</h2>
-      {gameState.targetPlayer && (
-        <p className="mb-2 text-gray-700 font-semibold">Pregunta para: <span className="text-blue-600">{gameState.targetPlayer.name}</span></p>
-      )}
-      <h3 className="text-lg font-bold mb-4">Vota la respuesta que creas correcta</h3>
-      <p className="mb-4">{gameState.question.text}</p>
-      <div className="space-y-2">
-        {gameState.answers.map((answer) => (
-          <button
-            key={answer.id}
-            onClick={() => vote(answer.id)}
-            className="w-full p-2 border rounded hover:bg-gray-100"
-          >
-            {answer.text}
-          </button>
-        ))}
+      <h2 className="text-3xl font-bold mb-6 font-cabin-sketch">Vota por la mejor respuesta:</h2>
+      <div className="w-full max-w-md bg-white text-black p-6 rounded-lg shadow-lg">
+        <ul className="mb-4">
+          {gameState.answers.map((answer) => (
+            <li
+              key={answer.id}
+              className="flex items-center justify-between py-2 border-b border-gray-300"
+            >
+              <span className="text-lg font-medium">{answer.text}</span>
+              <motion.button
+                onClick={() => vote(answer.id)}
+                className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-lg hover:bg-blue-400"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Votar
+              </motion.button>
+            </li>
+          ))}
+        </ul>
       </div>
     </motion.div>
   );
