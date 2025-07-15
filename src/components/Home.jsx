@@ -39,8 +39,8 @@ function Home() {
         >
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Reconectando...</h2>
-            <p className="text-gray-600">Volviendo a tu partida en curso</p>
+            <h2 className="text-xl font-semibold text-neutral-800 mb-2">Reconectando...</h2>
+            <p className="text-neutral-600">Volviendo a tu partida en curso</p>
           </div>
         </motion.div>
       </div>
@@ -114,6 +114,7 @@ function Home() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
+            Juego de preguntas psicológicas
           </motion.p>
         </motion.div>
 
@@ -131,7 +132,7 @@ function Home() {
         >
           {/* Sección de Perfil */}
           <motion.div
-            className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl p-5 text-white shadow-lg"
+            className="bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500 rounded-2xl p-5 text-white shadow-lg"
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -171,14 +172,14 @@ function Home() {
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.6 }}
           >
-            <label className="block text-slate-700 font-semibold text-lg">
+            <label className="block text-neutral-700 font-semibold text-lg">
               Código de sala (opcional)
             </label>
             <input
               type="text"
               value={roomCode}
               onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-              className="w-full px-4 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-center text-lg font-bold tracking-wider uppercase text-slate-700 placeholder-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-200 outline-none"
+              className="w-full px-4 py-4 bg-neutral-50 border-2 border-neutral-200 rounded-2xl text-center text-lg font-bold tracking-wider uppercase text-neutral-700 placeholder-neutral-400 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition-all duration-200 outline-none"
               placeholder="ABCD"
               maxLength={6}
             />
@@ -210,7 +211,7 @@ function Home() {
           >
             <motion.button
               onClick={handleCreateRoom}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
               whileHover={{ y: -2 }}
               whileTap={{ y: 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
@@ -226,7 +227,7 @@ function Home() {
             <motion.button
               onClick={handleJoinRoom}
               disabled={!roomCode.trim()}
-              className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:from-slate-300 disabled:to-slate-400 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+              className="w-full bg-gradient-to-r from-accent-500 to-success-500 hover:from-accent-600 hover:to-success-600 disabled:from-neutral-300 disabled:to-neutral-400 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
               whileHover={roomCode.trim() ? { y: -2 } : {}}
               whileTap={roomCode.trim() ? { y: 0 } : {}}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
@@ -268,6 +269,7 @@ function Home() {
             animate={{ y: [0, -2, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
+            <span>¡Diviértete jugando!</span>
           </motion.div>
         </motion.div>
       </motion.div>

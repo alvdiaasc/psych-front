@@ -6,7 +6,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    box-sizing: border-box;
   }
   
   body {
@@ -58,8 +58,8 @@
   /* Tarjeta de jugador */
   .player-card {
     @apply flex items-center gap-4 p-4;
-    @apply bg-gradient-to-r from-blue-50 to-purple-50;
-    @apply border border-blue-200 rounded-2xl;
+    @apply bg-gradient-to-r from-primary-50 to-secondary-50;
+    @apply border border-primary-200 rounded-2xl;
     @apply shadow-md hover:shadow-lg;
     @apply transform hover:-translate-y-1 hover:scale-105;
     @apply transition-all duration-300;
@@ -70,7 +70,7 @@
   .player-avatar {
     @apply w-16 h-16 rounded-full flex items-center justify-center;
     @apply text-2xl text-white shadow-lg;
-    @apply bg-gradient-to-br from-blue-400 via-purple-400 to-indigo-400;
+    @apply bg-gradient-to-br from-primary-400 via-secondary-400 to-accent-400;
     @apply group-hover:scale-110 transition-transform duration-300;
   }
   
@@ -78,9 +78,9 @@
   .input-game {
     @apply w-full px-6 py-4 text-lg;
     @apply bg-white/95 backdrop-blur-sm;
-    @apply border-2 border-blue-200 focus:border-blue-400;
+    @apply border-2 border-gray-200 focus:border-primary-400;
     @apply rounded-2xl shadow-md;
-    @apply focus:outline-none focus:ring-4 focus:ring-blue-200;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-200;
     @apply transition-all duration-200;
     @apply placeholder:text-gray-400;
   }
@@ -88,7 +88,7 @@
   /* Fondo animado con gradientes azul-púrpura */
   .animated-bg {
     @apply min-h-screen relative overflow-hidden;
-    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #6366F1 100%);
+    background: linear-gradient(135deg, #FF9800 0%, #9C27B0 50%, #4CAF50 100%);
     background-size: 400% 400%;
     animation: gradient-shift 8s ease infinite;
   }
@@ -102,7 +102,7 @@
   /* Tarjeta principal */
   .main-card {
     @apply bg-white/95 backdrop-blur-md p-8 rounded-3xl;
-    @apply shadow-floating border border-white/50;
+    @apply shadow-2xl border border-white/50;
     @apply relative overflow-hidden;
   }
   
@@ -114,7 +114,7 @@
   
   /* Loader animado */
   .loader {
-    @apply w-12 h-12 border-4 border-primary-200 border-t-primary-500;
+    @apply w-12 h-12 border-4 border-gray-200 border-t-primary-500;
     @apply rounded-full animate-spin;
   }
   
@@ -150,10 +150,10 @@
   }
   
   .bg-party {
-    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #6366F1 100%);
+    background: linear-gradient(135deg, #FF9800 0%, #9C27B0 50%, #4CAF50 100%);
   }
   
   .bg-fun {
-    background: linear-gradient(45deg, #3B82F6 0%, #1D4ED8 25%, #8B5CF6 50%, #7C3AED 75%, #6366F1 100%);
+    background: linear-gradient(45deg, #FFC107 0%, #FF9800 25%, #9C27B0 50%, #4CAF50 75%, #009688 100%);
   }
 }

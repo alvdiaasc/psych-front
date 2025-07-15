@@ -12,7 +12,7 @@ function App() {
   const { gameState } = useContext(GameContext);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 flex items-center justify-center p-4">
       {gameState.phase === 'home' && <Home />}
       {gameState.phase === 'lobby' && <Lobby />}
       {gameState.phase === 'question' && <QuestionRound />}
