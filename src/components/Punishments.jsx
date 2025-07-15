@@ -3,7 +3,11 @@ import { GameContext } from '../context/GameContext';
 import { motion } from 'framer-motion';
 
 function Punishments() {
-  const { gameState } = useContext(GameContext);
+  const { gameState, socket } = useContext(GameContext);
+
+  const playAgain = () => {
+    socket.emit('startGame', { roomCode: gameState.roomCode });
+  };
 
   const container = {
     hidden: { opacity: 0 },
@@ -95,9 +99,29 @@ function Punishments() {
             <p className="font-game font-bold text-primary-700 text-lg mb-2">
               ¡A cumplir los castigos!
             </p>
-            <p className="text-primary-600 font-game">
+            <p className="text-primary-600 font-game mb-4">
               Tómense su tiempo para completar cada castigo. ¡Que sea divertido para todos!
             </p>
+          </motion.div>
+
+          {/* Botón para jugar de nuevo */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5 }}
+            className="text-center mt-8"
+          >
+            <motion.button
+              onClick={playAgain}
+              className="btn-primary w-full max-w-md mx-auto shine"
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="flex items-center justify-center gap-3">
+                <span className="text-xl">🎮</span>
+                <span>Jugar de Nuevo</span>
+              </span>
+            </motion.button>
           </motion.div>
         </motion.div>
       </div>

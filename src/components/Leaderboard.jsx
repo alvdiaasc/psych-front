@@ -9,7 +9,7 @@ function Leaderboard() {
     socket.emit('startGame', { roomCode: gameState.roomCode });
   };
 
-  const isLastRound = gameState.round + 1 >= gameState.totalRounds;
+  const isLastRound = gameState.round >= gameState.totalRounds;
   
   const handleReady = () => {
     socket.emit('playerReady', { roomCode: gameState.roomCode });

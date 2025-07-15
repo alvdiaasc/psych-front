@@ -25,6 +25,10 @@ export const useGameSocket = (setGameState) => {
       setGameStateRef.current(safeState);
     });
 
+    socketInstance.on('phaseChange', (data) => {
+      setGameStateRef.current(prev => ({ ...prev, phase: data.phase }));
+    });
+
     socketInstance.on('error', (error) => {
       console.error('Socket error:', error);
       alert(error.message);
