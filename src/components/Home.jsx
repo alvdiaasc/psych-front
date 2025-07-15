@@ -119,7 +119,7 @@ function Home() {
 
         {/* Tarjeta principal */}
         <motion.div
-          className="main-card space-y-6"
+          className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-slate-200/50 space-y-6"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ 
@@ -131,7 +131,7 @@ function Home() {
         >
           {/* Sección de Perfil */}
           <motion.div
-            className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg p-4 text-white"
+            className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl p-5 text-white shadow-lg"
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -155,7 +155,7 @@ function Home() {
               </div>
               <button
                 onClick={() => setShowProfile(true)}
-                className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-colors"
+                className="bg-white/20 hover:bg-white/35 p-3 rounded-xl transition-all duration-200 hover:scale-105"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -166,19 +166,20 @@ function Home() {
 
           {/* Input código de sala */}
           <motion.div
-            className="space-y-2"
+            className="space-y-3"
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.6 }}
           >
-            <label className="block text-neutral-700 font-game text-lg font-semibold">
+            <label className="block text-slate-700 font-semibold text-lg">
               Código de sala (opcional)
             </label>
             <input
               type="text"
               value={roomCode}
               onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-              className="input-game uppercase"
+              className="w-full px-4 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl text-center text-lg font-bold tracking-wider uppercase text-slate-700 placeholder-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-200 outline-none"
+              placeholder="ABCD"
               maxLength={6}
             />
           </motion.div>
@@ -189,10 +190,14 @@ function Home() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-danger-50 border-2 border-danger-200 text-danger-700 p-4 rounded-2xl"
-            >            <div className="flex items-center gap-2">
-              <p className="font-game font-semibold">{error}</p>
-            </div>
+              className="bg-red-50 border-2 border-red-200 text-red-700 p-4 rounded-2xl"
+            >
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                <p className="font-semibold">{error}</p>
+              </div>
             </motion.div>
           )}
 
@@ -205,26 +210,32 @@ function Home() {
           >
             <motion.button
               onClick={handleCreateRoom}
-              className="btn-primary w-full shine group relative overflow-hidden"
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98, y: 0 }}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+              whileHover={{ y: -2 }}
+              whileTap={{ y: 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <span className="relative z-10 flex items-center justify-center gap-3">
-                <span>Crear Nueva Sala</span>
+              <span className="flex items-center justify-center gap-3 text-lg">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Crear Nueva Sala
               </span>
             </motion.button>
 
             <motion.button
               onClick={handleJoinRoom}
               disabled={!roomCode.trim()}
-              className="btn-secondary w-full shine group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
-              whileHover={roomCode.trim() ? { scale: 1.02, y: -2 } : {}}
-              whileTap={roomCode.trim() ? { scale: 0.98, y: 0 } : {}}
+              className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:from-slate-300 disabled:to-slate-400 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+              whileHover={roomCode.trim() ? { y: -2 } : {}}
+              whileTap={roomCode.trim() ? { y: 0 } : {}}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <span className="relative z-10 flex items-center justify-center gap-3">
-                <span>Unirse con Código</span>
+              <span className="flex items-center justify-center gap-3 text-lg">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                Unirse con Código
               </span>
             </motion.button>
           </motion.div>

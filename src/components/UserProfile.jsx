@@ -85,7 +85,11 @@ function UserProfile({ isOpen, onClose, onSave }) {
               <div className="relative">
                 <div 
                   className="rounded-full border-4 border-blue-500 overflow-hidden bg-white flex-shrink-0"
-                  style={{ width: '96px', height: '96px' }}
+                  style={{ 
+                    width: '96px', 
+                    height: '96px',
+                    borderRadius: '50%'
+                  }}
                 >
                   <img
                     src={avatarPreview}
@@ -96,20 +100,21 @@ function UserProfile({ isOpen, onClose, onSave }) {
                       height: '100%',
                       objectFit: 'cover',
                       objectPosition: 'center',
-                      display: 'block'
+                      display: 'block',
+                      borderRadius: '50%'
                     }}
                   />
                 </div>
                 <button
                   onClick={handleRemoveAvatar}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
+                  className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold shadow-lg transition-all duration-200 hover:scale-110"
                 >
                   ×
                 </button>
               </div>
             ) : (
-              <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-full border-4 border-blue-500 flex items-center justify-center">
-                <span className="text-2xl font-bold text-primary-600">
+              <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full border-4 border-blue-500 flex items-center justify-center">
+                <span className="text-2xl font-bold text-blue-600">
                   {playerName.charAt(0).toUpperCase() || '?'}
                 </span>
               </div>
@@ -126,16 +131,16 @@ function UserProfile({ isOpen, onClose, onSave }) {
 
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors text-sm"
+            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
           >
             {avatarPreview ? 'Cambiar Foto' : 'Subir Foto'}
           </button>
-          <p className="text-xs text-gray-500 mt-1">Máximo 2MB</p>
+          <p className="text-xs text-slate-500 mt-2">Máximo 2MB</p>
         </div>
 
         {/* Name Section */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-slate-700 mb-3">
             Nombre de Usuario
           </label>
           <input
@@ -143,26 +148,26 @@ function UserProfile({ isOpen, onClose, onSave }) {
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
             placeholder="Ingresa tu nombre"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+            className="w-full px-4 py-4 border-2 border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all duration-200 text-slate-700 placeholder-slate-400"
             maxLength={20}
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-slate-500 mt-2">
             {playerName.length}/20 caracteres
           </p>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex gap-4">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex-1 px-6 py-4 border-2 border-slate-300 text-slate-700 rounded-xl hover:bg-slate-50 hover:border-slate-400 font-semibold transition-all duration-200"
           >
             Cancelar
           </button>
           <button
             onClick={handleSave}
             disabled={!playerName.trim()}
-            className="flex-1 px-4 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-slate-300 disabled:to-slate-400 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl disabled:cursor-not-allowed disabled:shadow-none transition-all duration-200"
           >
             Guardar
           </button>

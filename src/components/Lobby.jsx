@@ -37,7 +37,7 @@ function Lobby() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-4xl mx-auto">
         {/* Header de la sala */}
         <motion.div
@@ -46,31 +46,31 @@ function Lobby() {
           animate={{ opacity: 1, y: 0 }}
         >
           <motion.h1 
-            className="text-4xl md:text-5xl font-display text-neutral-800 mb-2"
+            className="text-4xl md:text-5xl font-bold text-gray-800 mb-4"
             animate={{ scale: [1, 1.02, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
             Sala de Juego
           </motion.h1>
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3 inline-block shadow-lg">
-            <p className="text-lg font-game text-neutral-600">
-              Código: <span className="font-bold text-primary-600 text-xl">{gameState.roomCode}</span>
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl px-6 py-3 inline-block shadow-lg">
+            <p className="text-lg font-semibold">
+              Código: <span className="font-bold text-xl">{gameState.roomCode}</span>
             </p>
           </div>
         </motion.div>
 
         {/* Lista de jugadores */}
         <motion.div
-          className="main-card mb-8"
+          className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-blue-200/50 mb-8"
           variants={container}
           initial="hidden"
           animate="show"
         >
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-game font-bold text-neutral-800 mb-2">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
               Jugadores ({gameState.players?.length || 0}/8)
             </h2>
-            <p className="text-neutral-600 font-game">
+            <p className="text-gray-600">
               Esperando a que se unan más jugadores...
             </p>
           </div>
@@ -82,7 +82,7 @@ function Lobby() {
                   key={player.id}
                   variants={item}
                   layout
-                  className="player-card group hover:scale-105 transition-all duration-300"
+                  className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200/50 rounded-2xl p-4 shadow-md hover:shadow-lg group hover:scale-105 transition-all duration-300"
                 >
                   <div className="flex items-center gap-4">
                     {/* Avatar */}
@@ -95,16 +95,16 @@ function Lobby() {
                     
                     {/* Info del jugador */}
                     <div className="flex-1">
-                      <p className="font-game font-semibold text-neutral-800 text-lg">
+                      <p className="font-semibold text-gray-800 text-lg">
                         {player.name}
                       </p>
                       <div className="flex items-center gap-2">
                         {index === 0 && (
-                          <span className="text-xs bg-warning-100 text-warning-700 px-2 py-1 rounded-full font-game font-semibold">
+                          <span className="text-xs bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 rounded-full font-semibold">
                             Host
                           </span>
                         )}
-                        <span className="text-xs text-neutral-500 font-game">
+                        <span className="text-xs text-gray-500">
                           Jugador #{index + 1}
                         </span>
                       </div>
@@ -114,7 +114,7 @@ function Lobby() {
                     <motion.div
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
-                      className="w-3 h-3 bg-success-400 rounded-full"
+                      className="w-3 h-3 bg-green-500 rounded-full"
                       title="Conectado"
                     />
                   </div>
@@ -129,13 +129,13 @@ function Lobby() {
               {[...Array(Math.min(3, 8 - (gameState.players?.length || 0)))].map((_, index) => (
                 <motion.div
                   key={`empty-${index}`}
-                  className="border-2 border-dashed border-neutral-300 rounded-2xl p-4 flex items-center justify-center min-h-[80px]"
+                  className="border-2 border-dashed border-blue-300 bg-blue-50/30 rounded-2xl p-4 flex items-center justify-center min-h-[80px]"
                   animate={{ opacity: [0.3, 0.6, 0.3] }}
                   transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
                 >
-                  <div className="text-center text-neutral-400">
+                  <div className="text-center text-blue-400">
                     <div className="text-2xl mb-1">👥</div>
-                    <p className="text-sm font-game">Esperando jugador...</p>
+                    <p className="text-sm">Esperando jugador...</p>
                   </div>
                 </motion.div>
               ))}
@@ -155,10 +155,10 @@ function Lobby() {
             <motion.button
               onClick={startGame}
               disabled={!gameState.players || gameState.players.length < 2}
-              className={`btn-primary w-full max-w-md mx-auto shine ${
+              className={`w-full max-w-md mx-auto py-4 px-8 rounded-2xl font-bold text-lg shadow-lg transition-all duration-300 ${
                 (!gameState.players || gameState.players.length < 2) 
-                  ? 'opacity-50 cursor-not-allowed' 
-                  : ''
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                  : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 hover:shadow-xl'
               }`}
               whileHover={
                 gameState.players && gameState.players.length >= 2 
@@ -193,13 +193,13 @@ function Lobby() {
 
           {/* Información para jugadores no-host */}
           {gameState.players && gameState.players[0]?.id !== socket?.id && (
-            <div className="bg-primary-50 border-2 border-primary-200 rounded-2xl p-6 max-w-md mx-auto">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-2xl p-6 max-w-md mx-auto">
               <div className="text-center">
                 <div className="text-3xl mb-2">⏳</div>
-                <p className="font-game font-semibold text-primary-700 mb-1">
+                <p className="font-semibold text-blue-700 mb-1">
                   Esperando al host
                 </p>
-                <p className="text-sm text-primary-600 font-game">
+                <p className="text-sm text-blue-600">
                   {gameState.players[0]?.name} iniciará el juego cuando esté listo
                 </p>
               </div>
@@ -213,11 +213,11 @@ function Lobby() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
           >
-            <p className="text-sm text-neutral-500 font-game mb-2">
+            <p className="text-sm text-gray-600 mb-2">
               Comparte este código con tus amigos:
             </p>
             <motion.div
-              className="bg-neutral-100 rounded-xl px-4 py-2 inline-block cursor-pointer"
+              className="bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl px-4 py-2 inline-block cursor-pointer border border-gray-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
@@ -225,10 +225,10 @@ function Lobby() {
                 // Aquí podrías mostrar un toast de "copiado"
               }}
             >
-              <span className="font-mono text-lg font-bold text-neutral-700">
+              <span className="font-mono text-lg font-bold text-gray-700">
                 {gameState.roomCode}
               </span>
-              <span className="ml-2 text-xs text-neutral-500">📋 Click para copiar</span>
+              <span className="ml-2 text-xs text-gray-500">📋 Click para copiar</span>
             </motion.div>
           </motion.div>
         </motion.div>

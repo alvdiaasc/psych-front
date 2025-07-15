@@ -32,7 +32,10 @@ function PlayerAvatar({
     return (
       <div 
         className={`rounded-full border-2 ${borderColor} overflow-hidden bg-white flex-shrink-0 ${className}`}
-        style={sizeStyle}
+        style={{
+          ...sizeStyle,
+          borderRadius: '50%'
+        }}
       >
         <img
           src={avatarUrl}
@@ -43,7 +46,8 @@ function PlayerAvatar({
             height: '100%',
             objectFit: 'cover',
             objectPosition: 'center',
-            display: 'block'
+            display: 'block',
+            borderRadius: '50%'
           }}
         />
       </div>
