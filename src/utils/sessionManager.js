@@ -1,4 +1,5 @@
 // Gestor de sesión simple con localStorage
+// Actualizado para resolver problemas de importación
 class SessionManager {
   static KEYS = {
     PLAYER_ID: 'psych_player_id',
