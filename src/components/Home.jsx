@@ -114,7 +114,6 @@ function Home() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            Juego de preguntas psicológicas
           </motion.p>
         </motion.div>
 
@@ -269,7 +268,6 @@ function Home() {
             animate={{ y: [0, -2, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            <span>¡Diviértete jugando!</span>
           </motion.div>
         </motion.div>
       </motion.div>

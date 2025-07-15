@@ -289,26 +289,6 @@ function QuestionRound() {
             </span>
           </div>
         </motion.div>
-
-        {/* Consejos */}
-        {!submitted && (
-          <motion.div
-            className="mt-8 text-center"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-          >
-            <div className="bg-primary-50 border-2 border-primary-200 rounded-2xl p-4 max-w-md mx-auto">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-xl">💡</span>
-                <span className="font-game font-semibold text-primary-700">Consejo</span>
-              </div>
-              <p className="text-sm text-primary-600 font-game">
-                ¡Sé creativo pero creíble! La mejor respuesta es la que engaña a más jugadores.
-              </p>
-            </div>
-          </motion.div>
-        )}
       </div>
     </div>
   );
