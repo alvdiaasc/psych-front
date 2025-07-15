@@ -11,9 +11,13 @@ function Home() {
 
   // Cargar nombre guardado al iniciar
   useEffect(() => {
-    const savedName = SessionManager.getSavedPlayerName();
-    if (savedName) {
-      setPlayerName(savedName);
+    try {
+      const savedName = SessionManager?.getSavedPlayerName?.() || '';
+      if (savedName) {
+        setPlayerName(savedName);
+      }
+    } catch (error) {
+      console.error('Error loading saved player name:', error);
     }
   }, []);
 

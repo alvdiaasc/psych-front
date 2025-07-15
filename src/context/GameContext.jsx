@@ -25,16 +25,20 @@ export const GameProvider = ({ children }) => {
 
   // Intentar reconectar automáticamente al cargar
   useEffect(() => {
-    const session = SessionManager.getSession();
-    if (session && socket) {
-      setGameState(prev => ({ ...prev, isReconnecting: true }));
-      
-      // Intentar reconectar a la sala
-      socket.emit('rejoinRoom', {
-        roomCode: session.roomCode,
-        playerId: session.playerId,
+    try {
+      const session = SessionManager?.getSession?.();
+      if (session && socket) {
+        setGameState(prev => ({ ...prev, isReconnecting: true }));
+        
+        // Intentar reconectar a la sala
+        socket.emit('rejoinRoom', {
+          roomCode: session.roomCode,
+          playerId: session.playerId,
         playerName: session.playerName
       });
+    }
+    } catch (error) {
+      console.error('Error during reconnection attempt:', error);
     }
   }, [socket]);
 
@@ -53,7 +57,11 @@ export const GameProvider = ({ children }) => {
       });
 
       socket.on('reconnectFailed', (error) => {
-        SessionManager.clearSession();
+        try {
+          SessionManager?.clearSession?.();
+        } catch (err) {
+          console.error('Error clearing session:', err);
+        }
         setGameState(prev => ({ 
           ...prev, 
           isReconnecting: false,
@@ -83,26 +91,44 @@ export const GameProvider = ({ children }) => {
 
   // Funciones de utilidad para el contexto
   const joinRoom = (roomCode, playerName) => {
-    const playerId = SessionManager.getOrCreatePlayerId();
-    SessionManager.saveSession(playerId, playerName, roomCode);
-    SessionManager.savePlayerName(playerName);
+    try {
+      const playerId = SessionManager?.getOrCreatePlayerId?.() || `player_${Date.now()}`;
+      SessionManager?.saveSession?.(playerId, playerName, roomCode);
+      SessionManager?.savePlayerName?.(playerName);
     
-    if (socket) {
-      socket.emit('joinRoom', { roomCode, playerId, playerName });
+      if (socket) {
+        socket.emit('joinRoom', { roomCode, playerId, playerName });
+      }
+    } catch (error) {
+      console.error('Error joining room:', error);
+      if (socket) {
+        socket.emit('joinRoom', { roomCode, playerId: `player_${Date.now()}`, playerName });
+      }
     }
   };
 
   const createRoom = (playerName) => {
-    const playerId = SessionManager.getOrCreatePlayerId();
-    SessionManager.savePlayerName(playerName);
-    
-    if (socket) {
-      socket.emit('createRoom', { playerId, playerName });
+    try {
+      const playerId = SessionManager?.getOrCreatePlayerId?.() || `player_${Date.now()}`;
+      SessionManager?.savePlayerName?.(playerName);
+      
+      if (socket) {
+        socket.emit('createRoom', { playerId, playerName });
+      }
+    } catch (error) {
+      console.error('Error creating room:', error);
+      if (socket) {
+        socket.emit('createRoom', { playerId: `player_${Date.now()}`, playerName });
+      }
     }
   };
 
   const leaveRoom = () => {
-    SessionManager.clearSession();
+    try {
+      SessionManager?.clearSession?.();
+    } catch (error) {
+      console.error('Error clearing session:', error);
+    }
     setGameState(prev => ({ 
       ...prev, 
       phase: 'home',
