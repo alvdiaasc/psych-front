@@ -83,11 +83,13 @@ function UserProfile({ isOpen, onClose, onSave }) {
           <div className="relative mb-4">
             {avatarPreview ? (
               <div className="relative">
-                <img
-                  src={avatarPreview}
-                  alt="Avatar preview"
-                  className="w-24 h-24 rounded-full object-cover border-4 border-primary-200"
-                />
+                <div className="w-24 h-24 rounded-full border-4 border-blue-500 overflow-hidden bg-white">
+                  <img
+                    src={avatarPreview}
+                    alt="Avatar preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <button
                   onClick={handleRemoveAvatar}
                   className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
@@ -96,7 +98,7 @@ function UserProfile({ isOpen, onClose, onSave }) {
                 </button>
               </div>
             ) : (
-              <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-full border-4 border-primary-200 flex items-center justify-center">
+              <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-full border-4 border-blue-500 flex items-center justify-center">
                 <span className="text-2xl font-bold text-primary-600">
                   {playerName.charAt(0).toUpperCase() || '?'}
                 </span>

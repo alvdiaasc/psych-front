@@ -142,7 +142,7 @@ function Home() {
                   playerName={playerName} 
                   avatarUrl={playerAvatar} 
                   size="large"
-                  className="border-white"
+                  borderColor="border-white"
                 />
                 <div>
                   <h3 className="font-semibold text-lg">

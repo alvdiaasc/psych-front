@@ -5,6 +5,7 @@ function PlayerAvatar({
   avatarUrl, 
   size = 'medium', 
   className = '',
+  borderColor = 'border-blue-500',
   showInitial = true 
 }) {
   // Definir tamaños
@@ -20,11 +21,13 @@ function PlayerAvatar({
   // Si hay avatar, mostrar la imagen
   if (avatarUrl) {
     return (
-      <img
-        src={avatarUrl}
-        alt={`Avatar de ${playerName}`}
-        className={`${sizeClass} rounded-full object-cover border-2 border-primary-200 ${className}`}
-      />
+      <div className={`${sizeClass} rounded-full border-2 ${borderColor} overflow-hidden bg-white ${className}`}>
+        <img
+          src={avatarUrl}
+          alt={`Avatar de ${playerName}`}
+          className="w-full h-full object-cover"
+        />
+      </div>
     );
   }
 
@@ -32,7 +35,7 @@ function PlayerAvatar({
   if (showInitial && playerName) {
     return (
       <div
-        className={`${sizeClass} bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full border-2 border-primary-200 flex items-center justify-center ${className}`}
+        className={`${sizeClass} bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full border-2 ${borderColor} flex items-center justify-center ${className}`}
       >
         <span className="font-bold text-white">
           {playerName.charAt(0).toUpperCase()}
@@ -44,7 +47,7 @@ function PlayerAvatar({
   // Avatar por defecto
   return (
     <div
-      className={`${sizeClass} bg-gradient-to-br from-gray-300 to-gray-400 rounded-full border-2 border-gray-200 flex items-center justify-center ${className}`}
+      className={`${sizeClass} bg-gradient-to-br from-gray-300 to-gray-400 rounded-full border-2 ${borderColor} flex items-center justify-center ${className}`}
     >
       <span className="font-bold text-white">?</span>
     </div>
