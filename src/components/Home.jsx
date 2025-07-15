@@ -1,23 +1,50 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { GameContext } from '../context/GameContext';
 import { motion } from 'framer-motion';
 
 function Home() {
-  const { socket } = useContext(GameContext);
+  const { socket, gameState, createRoom, joinRoom, getSavedPlayerName } = useContext(GameContext);
   const [roomCode, setRoomCode] = useState('');
   const [playerName, setPlayerName] = useState('');
   const [error, setError] = useState('');
 
-  const createRoom = () => {
+  // Cargar nombre guardado al iniciar
+  useEffect(() => {
+    const savedName = getSavedPlayerName();
+    if (savedName) {
+      setPlayerName(savedName);
+    }
+  }, [getSavedPlayerName]);
+
+  // Mostrar estado de reconexión
+  if (gameState.isReconnecting) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 flex flex-col items-center justify-center p-4">
+        <motion.div 
+          className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-primary-200/50"
+          animate={{ scale: [1, 1.02, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Reconectando...</h2>
+            <p className="text-gray-600">Volviendo a tu partida en curso</p>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  const handleCreateRoom = () => {
     if (!playerName.trim()) {
       setError('¡Necesitas un nombre para jugar!');
       return;
     }
     setError('');
-    socket.emit('createRoom', { playerName });
+    createRoom(playerName);
   };
 
-  const joinRoom = () => {
+  const handleJoinRoom = () => {
     if (!playerName.trim() || !roomCode.trim()) {
       setError('¡Necesitas un nombre y un código de sala!');
       return;
@@ -27,7 +54,7 @@ function Home() {
       return;
     }
     setError('');
-    socket.emit('joinRoom', { roomCode, playerName });
+    joinRoom(roomCode, playerName);
   };
 
   return (
@@ -144,7 +171,7 @@ function Home() {
             transition={{ delay: 0.7 }}
           >
             <motion.button
-              onClick={createRoom}
+              onClick={handleCreateRoom}
               className="btn-primary w-full shine group relative overflow-hidden"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98, y: 0 }}
@@ -156,7 +183,7 @@ function Home() {
             </motion.button>
 
             <motion.button
-              onClick={joinRoom}
+              onClick={handleJoinRoom}
               disabled={!roomCode.trim()}
               className="btn-secondary w-full shine group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={roomCode.trim() ? { scale: 1.02, y: -2 } : {}}
