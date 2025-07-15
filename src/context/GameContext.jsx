@@ -90,35 +90,41 @@ export const GameProvider = ({ children }) => {
   }, [socket]);
 
   // Funciones de utilidad para el contexto
-  const joinRoom = (roomCode, playerName) => {
+  const joinRoom = (roomCode, playerName, playerAvatar = null) => {
     try {
       const playerId = SessionManager?.getOrCreatePlayerId?.() || `player_${Date.now()}`;
-      SessionManager?.saveSession?.(playerId, playerName, roomCode);
+      SessionManager?.saveSession?.(playerId, playerName, roomCode, playerAvatar);
       SessionManager?.savePlayerName?.(playerName);
+      if (playerAvatar) {
+        SessionManager?.savePlayerAvatar?.(playerAvatar);
+      }
     
       if (socket) {
-        socket.emit('joinRoom', { roomCode, playerId, playerName });
+        socket.emit('joinRoom', { roomCode, playerId, playerName, playerAvatar });
       }
     } catch (error) {
       console.error('Error joining room:', error);
       if (socket) {
-        socket.emit('joinRoom', { roomCode, playerId: `player_${Date.now()}`, playerName });
+        socket.emit('joinRoom', { roomCode, playerId: `player_${Date.now()}`, playerName, playerAvatar });
       }
     }
   };
 
-  const createRoom = (playerName) => {
+  const createRoom = (playerName, playerAvatar = null) => {
     try {
       const playerId = SessionManager?.getOrCreatePlayerId?.() || `player_${Date.now()}`;
       SessionManager?.savePlayerName?.(playerName);
+      if (playerAvatar) {
+        SessionManager?.savePlayerAvatar?.(playerAvatar);
+      }
       
       if (socket) {
-        socket.emit('createRoom', { playerId, playerName });
+        socket.emit('createRoom', { playerId, playerName, playerAvatar });
       }
     } catch (error) {
       console.error('Error creating room:', error);
       if (socket) {
-        socket.emit('createRoom', { playerId: `player_${Date.now()}`, playerName });
+        socket.emit('createRoom', { playerId: `player_${Date.now()}`, playerName, playerAvatar });
       }
     }
   };

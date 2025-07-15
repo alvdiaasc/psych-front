@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { GameContext } from '../context/GameContext';
+import PlayerAvatar from './PlayerAvatar';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function Lobby() {
@@ -85,9 +86,12 @@ function Lobby() {
                 >
                   <div className="flex items-center gap-4">
                     {/* Avatar */}
-                    <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${playerAvatarColors[index % playerAvatarColors.length]} flex items-center justify-center text-white font-display text-lg shadow-md`}>
-                      {player.name.charAt(0).toUpperCase()}
-                    </div>
+                    <PlayerAvatar 
+                      playerName={player.name}
+                      avatarUrl={player.avatar}
+                      size="medium"
+                      className="shadow-md"
+                    />
                     
                     {/* Info del jugador */}
                     <div className="flex-1">

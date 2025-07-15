@@ -1,23 +1,30 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { GameContext } from '../context/GameContext';
 import SessionManager from '../utils/sessionManager';
+import UserProfile from './UserProfile';
+import PlayerAvatar from './PlayerAvatar';
 import { motion } from 'framer-motion';
 
 function Home() {
   const { socket, gameState, createRoom, joinRoom } = useContext(GameContext);
   const [roomCode, setRoomCode] = useState('');
   const [playerName, setPlayerName] = useState('');
+  const [playerAvatar, setPlayerAvatar] = useState('');
   const [error, setError] = useState('');
+  const [showProfile, setShowProfile] = useState(false);
 
-  // Cargar nombre guardado al iniciar
+  // Cargar datos del perfil al iniciar
   useEffect(() => {
     try {
-      const savedName = SessionManager?.getSavedPlayerName?.() || '';
-      if (savedName) {
-        setPlayerName(savedName);
+      const profile = SessionManager?.getPlayerProfile?.() || {};
+      if (profile.playerName) {
+        setPlayerName(profile.playerName);
+      }
+      if (profile.playerAvatar) {
+        setPlayerAvatar(profile.playerAvatar);
       }
     } catch (error) {
-      console.error('Error loading saved player name:', error);
+      console.error('Error loading player profile:', error);
     }
   }, []);
 
@@ -46,7 +53,7 @@ function Home() {
       return;
     }
     setError('');
-    createRoom(playerName);
+    createRoom(playerName, playerAvatar);
   };
 
   const handleJoinRoom = () => {
@@ -59,7 +66,12 @@ function Home() {
       return;
     }
     setError('');
-    joinRoom(roomCode, playerName);
+    joinRoom(roomCode, playerName, playerAvatar);
+  };
+
+  const handleProfileSave = (profileData) => {
+    setPlayerName(profileData.playerName);
+    setPlayerAvatar(profileData.playerAvatar);
   };
 
   return (
@@ -117,23 +129,39 @@ function Home() {
             delay: 0.3 
           }}
         >
-          {/* Input nombre */}
+          {/* Sección de Perfil */}
           <motion.div
-            className="space-y-2"
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.5 }}
+            className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg p-4 text-white"
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
           >
-            <label className="block text-neutral-700 font-game text-lg font-semibold">
-              Tu nombre
-            </label>
-            <input
-              type="text"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
-              className="input-game"
-              maxLength={20}
-            />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <PlayerAvatar 
+                  playerName={playerName} 
+                  avatarUrl={playerAvatar} 
+                  size="large"
+                  className="border-white"
+                />
+                <div>
+                  <h3 className="font-semibold text-lg">
+                    {playerName || 'Tu Perfil'}
+                  </h3>
+                  <p className="text-sm opacity-90">
+                    {playerName ? 'Toca para editar' : 'Configura tu perfil'}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowProfile(true)}
+                className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </button>
+            </div>
           </motion.div>
 
           {/* Input código de sala */}
@@ -232,6 +260,13 @@ function Home() {
           </motion.div>
         </motion.div>
       </motion.div>
+
+      {/* Modal de perfil */}
+      <UserProfile
+        isOpen={showProfile}
+        onClose={() => setShowProfile(false)}
+        onSave={handleProfileSave}
+      />
     </div>
   );
 }
