@@ -1,5 +1,5 @@
 // Gestor de sesión simple con localStorage
-export class SessionManager {
+class SessionManager {
   static KEYS = {
     PLAYER_ID: 'psych_player_id',
     PLAYER_NAME: 'psych_player_name',
@@ -64,3 +64,5 @@ export class SessionManager {
     return localStorage.getItem(this.KEYS.PLAYER_NAME) || '';
   }
 }
+
+export default SessionManager;

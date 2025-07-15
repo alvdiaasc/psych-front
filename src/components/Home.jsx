@@ -1,20 +1,21 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { GameContext } from '../context/GameContext';
+import SessionManager from '../utils/sessionManager';
 import { motion } from 'framer-motion';
 
 function Home() {
-  const { socket, gameState, createRoom, joinRoom, getSavedPlayerName } = useContext(GameContext);
+  const { socket, gameState, createRoom, joinRoom } = useContext(GameContext);
   const [roomCode, setRoomCode] = useState('');
   const [playerName, setPlayerName] = useState('');
   const [error, setError] = useState('');
 
   // Cargar nombre guardado al iniciar
   useEffect(() => {
-    const savedName = getSavedPlayerName();
+    const savedName = SessionManager.getSavedPlayerName();
     if (savedName) {
       setPlayerName(savedName);
     }
-  }, [getSavedPlayerName]);
+  }, []);
 
   // Mostrar estado de reconexión
   if (gameState.isReconnecting) {

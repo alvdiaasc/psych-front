@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useGameSocket } from '../hooks/useGameSocket';
-import { SessionManager } from '../utils/sessionManager';
+import SessionManager from '../utils/sessionManager';
 
 export const GameContext = createContext();
 
@@ -125,8 +125,7 @@ export const GameProvider = ({ children }) => {
       socket,
       joinRoom,
       createRoom,
-      leaveRoom,
-      getSavedPlayerName: SessionManager.getSavedPlayerName
+      leaveRoom
     }}>
       {children}
     </GameContext.Provider>
