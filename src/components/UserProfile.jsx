@@ -83,11 +83,21 @@ function UserProfile({ isOpen, onClose, onSave }) {
           <div className="relative mb-4">
             {avatarPreview ? (
               <div className="relative">
-                <div className="w-24 h-24 rounded-full border-4 border-blue-500 overflow-hidden bg-white">
+                <div 
+                  className="rounded-full border-4 border-blue-500 overflow-hidden bg-white flex-shrink-0"
+                  style={{ width: '96px', height: '96px' }}
+                >
                   <img
                     src={avatarPreview}
                     alt="Avatar preview"
-                    className="w-full h-full object-cover"
+                    className="block"
+                    style={{ 
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                      display: 'block'
+                    }}
                   />
                 </div>
                 <button
