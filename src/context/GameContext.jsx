@@ -34,8 +34,9 @@ export const GameProvider = ({ children }) => {
         socket.emit('rejoinRoom', {
           roomCode: session.roomCode,
           playerId: session.playerId,
-        playerName: session.playerName
-      });
+          playerName: session.playerName,
+          playerAvatar: session.playerAvatar
+        });
     }
     } catch (error) {
       console.error('Error during reconnection attempt:', error);
