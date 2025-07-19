@@ -172,7 +172,7 @@ function QuestionRound() {
                     value={answer}
                     onChange={(e) => setAnswer(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Sé creativo... ¡Haz que los demás crean tu respuesta!"
+                    placeholder="Piensa que haría Ramón..."
                     className="input-game min-h-[120px] resize-none"
                     maxLength={200}
                     disabled={submitted || timeLeft === 0}

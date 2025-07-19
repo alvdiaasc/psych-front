@@ -6,6 +6,19 @@ function WinnerSelection() {
   const { gameState, socket } = useContext(GameContext);
   const [selectedPunishments, setSelectedPunishments] = useState([]);
 
+  // Función para procesar los placeholders en el texto de preview
+  const processPlaceholders = (text) => {
+    if (!text) return text;
+    
+    // Reemplazar {player} con "un jugador"
+    let processedText = text.replace(/\{player\}/g, 'un jugador');
+    
+    // Reemplazar {other} con "otro jugador"
+    processedText = processedText.replace(/\{other\}/g, 'otro jugador');
+    
+    return processedText;
+  };
+
   const togglePunishment = (punishment) => {
     setSelectedPunishments((prev) => {
       if (prev.includes(punishment)) {
@@ -88,18 +101,21 @@ function WinnerSelection() {
                   </div>
                   <div className="flex-1">
                     <p className="font-game text-neutral-800 leading-relaxed">
-                      {punishment.text}
+                      {processPlaceholders(punishment.text)}
                     </p>
                     <div className="mt-2">
                       <span className={`inline-block px-3 py-1 rounded-full text-xs font-game font-semibold ${
+                        punishment.type === 'drink' ? 'bg-orange-100 text-orange-700' :
+                        punishment.type === 'prank' ? 'bg-purple-100 text-purple-700' :
                         punishment.type === 'physical' ? 'bg-blue-100 text-blue-700' :
-                        punishment.type === 'silly' ? 'bg-purple-100 text-purple-700' :
-                        punishment.type === 'creative' ? 'bg-green-100 text-green-700' :
-                        'bg-orange-100 text-orange-700'
+                        punishment.type === 'silly' ? 'bg-green-100 text-green-700' :
+                        'bg-gray-100 text-gray-700'
                       }`}>
-                        {punishment.type === 'physical' ? 'Físico' :
-                         punishment.type === 'silly' ? 'Divertido' :
-                         punishment.type === 'creative' ? 'Creativo' : 'Gracioso'}
+                        {punishment.type === 'drink' ? 'Bebida' :
+                         punishment.type === 'prank' ? 'Travesura' :
+                         punishment.type === 'physical' ? 'Físico' :
+                         punishment.type === 'silly' ? 'Divertido' : 
+                         punishment.type || 'Otro'}
                       </span>
                     </div>
                   </div>
