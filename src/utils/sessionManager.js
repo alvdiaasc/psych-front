@@ -43,11 +43,18 @@ class SessionManager {
     return null;
   }
 
-  // Limpiar sesión
+  // Limpiar sesión completa
   static clearSession() {
     Object.values(this.KEYS).forEach(key => {
       localStorage.removeItem(key);
     });
+  }
+
+  // Limpiar solo la información de la sala, manteniendo el perfil del usuario
+  static clearRoomSession() {
+    localStorage.removeItem(this.KEYS.ROOM_CODE);
+    localStorage.removeItem(this.KEYS.SESSION_TIMESTAMP);
+    // Mantener PLAYER_ID, PLAYER_NAME y PLAYER_AVATAR
   }
 
   // Obtener o crear ID de jugador

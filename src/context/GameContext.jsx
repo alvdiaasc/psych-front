@@ -59,9 +59,9 @@ export const GameProvider = ({ children }) => {
 
       socket.on('reconnectFailed', (error) => {
         try {
-          SessionManager?.clearSession?.();
+          SessionManager?.clearRoomSession?.();
         } catch (err) {
-          console.error('Error clearing session:', err);
+          console.error('Error clearing room session:', err);
         }
         setGameState(prev => ({ 
           ...prev, 
@@ -132,15 +132,13 @@ export const GameProvider = ({ children }) => {
 
   const leaveRoom = () => {
     try {
-      SessionManager?.clearSession?.();
+      // Solo limpiar la sesión de sala, no el perfil del usuario
+      SessionManager?.clearRoomSession?.();
     } catch (error) {
-      console.error('Error clearing session:', error);
+      console.error('Error clearing room session:', error);
     }
     
-    if (socket) {
-      socket.emit('leaveRoom', { roomCode: gameState.roomCode });
-    }
-    
+    // Primero actualizar el estado local para ir al home inmediatamente
     setGameState(prev => ({ 
       ...prev, 
       phase: 'home',
@@ -151,6 +149,11 @@ export const GameProvider = ({ children }) => {
       punishments: [],
       availablePunishments: []
     }));
+    
+    // Después notificar al servidor
+    if (socket && gameState.roomCode) {
+      socket.emit('leaveRoom', { roomCode: gameState.roomCode });
+    }
   };
 
   const kickPlayer = (targetPlayerId) => {

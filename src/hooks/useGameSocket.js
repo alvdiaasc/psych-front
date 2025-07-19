@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
+import SessionManager from '../utils/sessionManager.js';
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://psych-back.onrender.com/';
 
@@ -37,6 +38,12 @@ export const useGameSocket = (setGameState) => {
     // Manejar expulsión de la sala
     socketInstance.on('kicked', (data) => {
       alert(data.message);
+      // Limpiar solo la sala, no el perfil del usuario
+      try {
+        SessionManager?.clearRoomSession?.();
+      } catch (error) {
+        console.error('Error clearing room session:', error);
+      }
       // Limpiar estado y volver al home
       setGameStateRef.current(prev => ({
         ...prev,
