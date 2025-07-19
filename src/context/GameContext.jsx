@@ -136,6 +136,11 @@ export const GameProvider = ({ children }) => {
     } catch (error) {
       console.error('Error clearing session:', error);
     }
+    
+    if (socket) {
+      socket.emit('leaveRoom', { roomCode: gameState.roomCode });
+    }
+    
     setGameState(prev => ({ 
       ...prev, 
       phase: 'home',
@@ -146,9 +151,14 @@ export const GameProvider = ({ children }) => {
       punishments: [],
       availablePunishments: []
     }));
-    
-    if (socket) {
-      socket.emit('leaveRoom');
+  };
+
+  const kickPlayer = (targetPlayerId) => {
+    if (socket && gameState.roomCode) {
+      socket.emit('kickPlayer', { 
+        roomCode: gameState.roomCode, 
+        targetPlayerId 
+      });
     }
   };
 
@@ -158,7 +168,8 @@ export const GameProvider = ({ children }) => {
       socket,
       joinRoom,
       createRoom,
-      leaveRoom
+      leaveRoom,
+      kickPlayer
     }}>
       {children}
     </GameContext.Provider>

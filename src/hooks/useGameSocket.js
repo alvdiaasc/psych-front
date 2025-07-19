@@ -34,6 +34,32 @@ export const useGameSocket = (setGameState) => {
       alert(error.message);
     });
 
+    // Manejar expulsión de la sala
+    socketInstance.on('kicked', (data) => {
+      alert(data.message);
+      // Limpiar estado y volver al home
+      setGameStateRef.current(prev => ({
+        ...prev,
+        phase: 'home',
+        roomCode: null,
+        players: [],
+        answers: [],
+        scores: {},
+        punishments: [],
+        availablePunishments: []
+      }));
+    });
+
+    // Manejar confirmación de expulsión (para el host)
+    socketInstance.on('playerKicked', (data) => {
+      alert(data.message);
+    });
+
+    // Manejar salida exitosa de sala
+    socketInstance.on('leftRoom', (data) => {
+      console.log(data.message);
+    });
+
     return () => {
       socketInstance.disconnect();
     };

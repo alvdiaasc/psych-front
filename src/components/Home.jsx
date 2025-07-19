@@ -6,7 +6,7 @@ import PlayerAvatar from './PlayerAvatar';
 import { motion } from 'framer-motion';
 
 function Home() {
-  const { socket, gameState, createRoom, joinRoom } = useContext(GameContext);
+  const { socket, gameState, createRoom, joinRoom, leaveRoom } = useContext(GameContext);
   const [roomCode, setRoomCode] = useState('');
   const [playerName, setPlayerName] = useState('');
   const [playerAvatar, setPlayerAvatar] = useState('');
@@ -27,6 +27,36 @@ function Home() {
       console.error('Error loading player profile:', error);
     }
   }, []);
+
+  // Si estamos en una sala pero queremos volver al home
+  if (gameState.phase !== 'home' && gameState.phase !== 'lobby') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 flex flex-col items-center justify-center p-4">
+        <motion.div 
+          className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-primary-200/50 text-center"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          <h2 className="text-xl font-semibold text-neutral-800 mb-4">¿Quieres salir del juego?</h2>
+          <p className="text-neutral-600 mb-6">Si sales ahora, perderás tu progreso en la partida actual.</p>
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={leaveRoom}
+              className="bg-gradient-to-r from-danger-500 to-danger-600 hover:from-danger-600 hover:to-danger-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200"
+            >
+              Salir del Juego
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-gradient-to-r from-neutral-400 to-neutral-500 hover:from-neutral-500 hover:to-neutral-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200"
+            >
+              Cancelar
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   // Mostrar estado de reconexión
   if (gameState.isReconnecting) {

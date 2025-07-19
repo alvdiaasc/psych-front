@@ -4,11 +4,25 @@ import PlayerAvatar from './PlayerAvatar';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function Lobby() {
-  const { gameState, socket } = useContext(GameContext);
+  const { gameState, socket, leaveRoom, kickPlayer } = useContext(GameContext);
 
   const startGame = () => {
     socket.emit('startGame', { roomCode: gameState.roomCode });
   };
+
+  const handleKickPlayer = (playerId, playerName) => {
+    if (window.confirm(`¿Estás seguro de que quieres expulsar a ${playerName}?`)) {
+      kickPlayer(playerId);
+    }
+  };
+
+  const handleLeaveRoom = () => {
+    if (window.confirm('¿Estás seguro de que quieres salir de la sala?')) {
+      leaveRoom();
+    }
+  };
+
+  const isHost = gameState.players && gameState.players[0]?.id === socket?.id;
 
   const container = {
     hidden: { opacity: 0 },
@@ -110,13 +124,29 @@ function Lobby() {
                       </div>
                     </div>
 
-                    {/* Estado de conexión */}
-                    <motion.div
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="w-3 h-3 bg-success-400 rounded-full"
-                      title="Conectado"
-                    />
+                    {/* Controles del host */}
+                    <div className="flex items-center gap-2">
+                      {/* Botón de expulsión (solo visible para el host y para jugadores que no sean el host) */}
+                      {isHost && index !== 0 && (
+                        <button
+                          onClick={() => handleKickPlayer(player.id, player.name)}
+                          className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-all duration-200 hover:scale-105"
+                          title={`Expulsar a ${player.name}`}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      )}
+                      
+                      {/* Estado de conexión */}
+                      <motion.div
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="w-3 h-3 bg-success-400 rounded-full"
+                        title="Conectado"
+                      />
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -150,8 +180,23 @@ function Lobby() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
+          {/* Botón volver */}
+          <motion.button
+            onClick={handleLeaveRoom}
+            className="w-full max-w-md mx-auto py-3 px-6 bg-gradient-to-r from-neutral-400 to-neutral-500 hover:from-neutral-500 hover:to-neutral-600 text-white font-bold rounded-2xl shadow-lg transition-all duration-300 mb-4"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <span className="flex items-center justify-center gap-3">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Volver al Inicio
+            </span>
+          </motion.button>
+
           {/* Botón iniciar juego (solo para host) */}
-          {gameState.players && gameState.players[0]?.id === socket?.id && (
+          {isHost && (
             <motion.button
               onClick={startGame}
               disabled={!gameState.players || gameState.players.length < 2}
@@ -192,10 +237,10 @@ function Lobby() {
           )}
 
           {/* Información para jugadores no-host */}
-          {gameState.players && gameState.players[0]?.id !== socket?.id && (
+          {!isHost && (
             <div className="bg-gradient-to-r from-primary-50 to-secondary-50 border-2 border-primary-200 rounded-2xl p-6 max-w-md mx-auto">
               <div className="text-center">
-                <div className="text-3xl mb-2">...</div>
+                <div className="text-3xl mb-2">⏳</div>
                 <p className="font-game font-semibold text-primary-700 mb-1">
                   Esperando al host
                 </p>
