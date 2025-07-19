@@ -24,6 +24,11 @@ function Leaderboard() {
   // Ordenar los scores de mayor a menor
   const sortedScores = gameState.scores ? [...Object.entries(gameState.scores)].sort((a, b) => b[1] - a[1]) : [];
   
+  // Calcular quién es el ganador o si hay empate
+  const isWinner = sortedScores.length > 0 && sortedScores[0][0] === socket?.id;
+  const isTiedWinner = gameState.tiedWinners && gameState.tiedWinners.includes(socket?.id);
+  const hasTie = gameState.tiedWinners && gameState.tiedWinners.length > 1;
+  
   // Determinar las posiciones (considerando empates)
   const rankedScores = sortedScores.length > 0 ? sortedScores.map((score, idx) => {
     if (idx === 0) return { id: score[0], score: score[1], position: 1 };
@@ -96,6 +101,23 @@ function Leaderboard() {
           >
             {isLastRound ? 'Resultados Finales' : 'Puntuaciones'}
           </motion.h1>
+          
+          {/* Indicador de empate */}
+          {isLastRound && hasTie && (
+            <motion.div
+              className="bg-yellow-100 border-2 border-yellow-400 rounded-2xl px-6 py-3 inline-block shadow-lg mb-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <p className="text-lg font-game text-yellow-800 font-bold">
+                ¡Empate en el primer lugar! 
+                <span className="block text-sm mt-1">
+                  {gameState.tiedWinners.length} jugadores empatados
+                </span>
+              </p>
+            </motion.div>
+          )}
           
           {!isLastRound && (
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3 inline-block shadow-lg">
@@ -231,9 +253,17 @@ function Leaderboard() {
 
                   {/* Información del jugador */}
                   <div className="flex-1">
-                    <p className="font-game font-semibold text-lg">
-                      {player.name}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-game font-semibold text-lg">
+                        {player.name}
+                      </p>
+                      {/* Indicador de empate */}
+                      {gameState.tiedWinners && gameState.tiedWinners.includes(player.id) && gameState.tiedWinners.length > 1 && (
+                        <span className="bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded-full font-bold">
+                          EMPATE
+                        </span>
+                      )}
+                    </div>
                     <p className="text-sm opacity-75">
                       Posición: {player.position}°
                     </p>
@@ -276,8 +306,8 @@ function Leaderboard() {
               </div>
 
               <div className="space-y-4 max-w-md mx-auto">
-                {/* Botón de Ronda de Castigos (solo para host) */}
-                {isHost && (
+                {/* Botón de Ronda de Castigos (para ganador o ganadores empatados) */}
+                {(isWinner || isTiedWinner) && (
                   <motion.button
                     onClick={startPunishmentRound}
                     className="btn-secondary w-full shine"
@@ -286,7 +316,9 @@ function Leaderboard() {
                   >
                     <span className="flex items-center justify-center gap-3">
                       <span>🎭</span>
-                      <span>Ronda de Castigos</span>
+                      <span>
+                        {hasTie ? 'Iniciar Castigos (Ganador Empatado)' : 'Ronda de Castigos'}
+                      </span>
                     </span>
                   </motion.button>
                 )}
@@ -306,15 +338,29 @@ function Leaderboard() {
                   </motion.button>
                 )}
 
-                {/* Mensaje para jugadores no-host */}
-                {!isHost && (
+                {/* Mensaje para jugadores que no son ganador ni host */}
+                {!isWinner && !isHost && (
                   <div className="bg-accent-50 border-2 border-accent-200 rounded-2xl p-6">
                     <div className="text-center">
                       <p className="font-game font-semibold text-accent-700 mb-1">
-                        Esperando al host
+                        Esperando decisiones
                       </p>
                       <p className="text-sm text-accent-600 font-game">
-                        {gameState.players[0]?.name} decidirá qué hacer a continuación
+                        El ganador puede elegir castigos o el host puede iniciar una nueva partida
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Mensaje especial para el ganador */}
+                {isWinner && (
+                  <div className="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-6">
+                    <div className="text-center">
+                      <p className="font-game font-semibold text-yellow-700 mb-1">
+                        ¡Eres el ganador! 🏆
+                      </p>
+                      <p className="text-sm text-yellow-600 font-game">
+                        Puedes elegir castigos para los {gameState.players.length - 1} perdedores
                       </p>
                     </div>
                   </div>
