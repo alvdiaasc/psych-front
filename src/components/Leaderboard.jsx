@@ -9,7 +9,13 @@ function Leaderboard() {
     socket.emit('startGame', { roomCode: gameState.roomCode });
   };
 
+  const startPunishmentRound = () => {
+    socket.emit('startPunishmentRound', { roomCode: gameState.roomCode });
+  };
+
   const isLastRound = gameState.round >= gameState.totalRounds;
+  const isGameFinished = gameState.isGameFinished;
+  const isHost = gameState.players && gameState.players[0]?.id === socket?.id;
   
   const handleReady = () => {
     socket.emit('playerReady', { roomCode: gameState.roomCode });
@@ -255,32 +261,65 @@ function Leaderboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
         >
-          {isLastRound ? (
+          {isGameFinished ? (
             <>
-              {/* Juego terminado */}
+              {/* Juego terminado - mostrar opciones finales */}
               <div className="bg-primary-50 border-2 border-primary-200 rounded-2xl p-6 max-w-md mx-auto mb-6">
                 <div className="text-center">
                   <p className="font-game font-bold text-primary-700 text-xl mb-2">
                     ¡Juego Terminado!
                   </p>
                   <p className="text-primary-600 font-game">
-                    ¡Gracias por jugar Psych!
+                    ¿Qué quieres hacer ahora?
                   </p>
                 </div>
               </div>
 
-              {gameState.players && gameState.players[0]?.id === socket?.id && (
-                <motion.button
-                  onClick={playAgain}
-                  className="btn-primary w-full max-w-md mx-auto shine"
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="flex items-center justify-center gap-3">
-                    <span>Jugar de Nuevo</span>
-                  </span>
-                </motion.button>
-              )}
+              <div className="space-y-4 max-w-md mx-auto">
+                {/* Botón de Ronda de Castigos (solo para host) */}
+                {isHost && (
+                  <motion.button
+                    onClick={startPunishmentRound}
+                    className="btn-secondary w-full shine"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="flex items-center justify-center gap-3">
+                      <span>🎭</span>
+                      <span>Ronda de Castigos</span>
+                    </span>
+                  </motion.button>
+                )}
+
+                {/* Botón de Jugar de Nuevo (solo para host) */}
+                {isHost && (
+                  <motion.button
+                    onClick={playAgain}
+                    className="btn-primary w-full shine"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="flex items-center justify-center gap-3">
+                      <span>🔄</span>
+                      <span>Jugar de Nuevo</span>
+                    </span>
+                  </motion.button>
+                )}
+
+                {/* Mensaje para jugadores no-host */}
+                {!isHost && (
+                  <div className="bg-accent-50 border-2 border-accent-200 rounded-2xl p-6">
+                    <div className="text-center">
+                      <p className="font-game font-semibold text-accent-700 mb-1">
+                        Esperando al host
+                      </p>
+                      <p className="text-sm text-accent-600 font-game">
+                        {gameState.players[0]?.name} decidirá qué hacer a continuación
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <>
