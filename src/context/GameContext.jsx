@@ -12,6 +12,7 @@ export const GameProvider = ({ children }) => {
     question: null,
     answers: [],
     scores: {},
+    votes: {},
     punishments: [],
     availablePunishments: [],
     winnerId: null,
