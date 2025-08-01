@@ -6,7 +6,7 @@ function VotingRound() {
   const { gameState, socket } = useContext(GameContext);
 
   const vote = (answerId) => {
-    if (!gameState.hasVoted) {
+    if (!hasVoted) {
       socket.emit('vote', {
         roomCode: gameState.roomCode,
         answerId
@@ -62,12 +62,16 @@ function VotingRound() {
     Object.keys(gameState.votes).length === gameState.players?.length &&
     gameState.players?.length > 0;
 
+  // Verificar si el jugador actual ha votado
+  const hasVoted = gameState.votes && socket?.id && gameState.votes[socket.id];
+
   // Debug: mostrar información de votación
   console.log('Debug votación:', {
     votes: gameState.votes,
     votesCount: gameState.votes ? Object.keys(gameState.votes).length : 0,
     playersCount: gameState.players?.length || 0,
     allPlayersVoted,
+    hasVoted,
     phase: gameState.phase
   });
 
@@ -183,12 +187,12 @@ function VotingRound() {
               <motion.button
                 key={answer.id}
                 onClick={() => vote(answer.id)}
-                disabled={gameState.hasVoted}
+                disabled={hasVoted}
                 className={`group relative p-6 rounded-2xl shadow-lg transition-all transform overflow-hidden text-left ${
-                  gameState.hasVoted 
+                  hasVoted 
                     ? 'bg-neutral-100 cursor-not-allowed opacity-70'
                     : 'bg-white hover:shadow-xl hover:-translate-y-2 cursor-pointer'
-                } ${!gameState.hasVoted ? 'hover:scale-105' : ''}`}
+                } ${!hasVoted ? 'hover:scale-105' : ''}`}
                 initial={{ opacity: 0, y: 20, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.9 }}
@@ -198,14 +202,14 @@ function VotingRound() {
                   stiffness: 300,
                   damping: 20
                 }}
-                whileHover={!gameState.hasVoted ? { 
+                whileHover={!hasVoted ? { 
                   scale: 1.02,
                   boxShadow: "0 20px 40px rgba(0,0,0,0.15)"
                 } : {}}
-                whileTap={!gameState.hasVoted ? { scale: 0.98 } : {}}
+                whileTap={!hasVoted ? { scale: 0.98 } : {}}
               >
                 {/* Indicador de voto */}
-                {gameState.hasVoted && (
+                {hasVoted && (
                   <motion.div
                     className="absolute top-4 right-4 w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white font-bold"
                     initial={{ scale: 0, rotate: -180 }}
@@ -229,7 +233,7 @@ function VotingRound() {
                 </motion.div>
 
                 {/* Efecto de hover */}
-                {!gameState.hasVoted && (
+                {!hasVoted && (
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-secondary-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"
                     initial={false}
@@ -247,14 +251,21 @@ function VotingRound() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          {gameState.hasVoted ? (
+          {hasVoted ? (
             <div>
               <p className="font-game font-bold text-accent-700 text-lg mb-2">
                 ¡Voto enviado!
               </p>
-              <p className="text-accent-600 font-game">
+              <p className="text-accent-600 font-game mb-3">
                 Esperando a que todos los jugadores voten...
               </p>
+              {/* Contador de votos */}
+              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-2xl px-4 py-2">
+                <span className="text-lg">🗳️</span>
+                <span className="font-game text-neutral-600">
+                  {gameState.votes ? Object.keys(gameState.votes).length : 0} / {gameState.players?.length || 0} han votado
+                </span>
+              </div>
             </div>
           ) : (
             <div>
