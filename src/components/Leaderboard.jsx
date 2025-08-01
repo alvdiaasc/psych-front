@@ -13,6 +13,18 @@ function Leaderboard() {
     socket.emit('startPunishmentRound', { roomCode: gameState.roomCode });
   };
 
+  // Función para obtener el nombre del jugador por ID
+  const getPlayerName = (playerId) => {
+    const player = gameState.players?.find(p => p.id === playerId);
+    return player ? player.name : 'Jugador desconocido';
+  };
+
+  // Función para obtener el avatar del jugador por ID
+  const getPlayerAvatar = (playerId) => {
+    const player = gameState.players?.find(p => p.id === playerId);
+    return player ? player.avatar : null;
+  };
+
   const isLastRound = gameState.round >= gameState.totalRounds;
   const isGameFinished = gameState.isGameFinished;
   const isHost = gameState.players && gameState.players[0]?.id === socket?.id;
@@ -127,6 +139,132 @@ function Leaderboard() {
             </div>
           )}
         </motion.div>
+
+        {/* Resultados de votación de la ronda anterior */}
+        {gameState.votes && gameState.answers && Object.keys(gameState.votes).length > 0 && (
+          <motion.div
+            className="main-card mb-8"
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 20 }}
+          >
+            <motion.h3 
+              className="text-2xl font-display font-bold text-center text-primary-700 mb-6"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              🎯 Resultados de la Votación
+            </motion.h3>
+
+            {/* Mostrar quién es el autor de cada respuesta y quién votó por ella */}
+            <div className="space-y-4">
+              {gameState.answers?.map((answer, index) => {
+                // Encontrar quién votó por esta respuesta
+                const votersForThisAnswer = Object.entries(gameState.votes)
+                  .filter(([voterId, votedAnswerId]) => votedAnswerId === answer.id)
+                  .map(([voterId]) => voterId);
+
+                return (
+                  <motion.div
+                    key={answer.id}
+                    className="bg-gradient-to-r from-neutral-50 to-neutral-100 rounded-2xl p-4 border-l-4 border-primary-400"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 + index * 0.1 }}
+                  >
+                    {/* Respuesta y autor */}
+                    <div className="mb-3">
+                      <div className="flex items-start gap-3 mb-2">
+                        {answer.playerId && getPlayerAvatar(answer.playerId) && (
+                          <div className="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                            {getPlayerAvatar(answer.playerId)}
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <p className="text-neutral-700 font-game text-lg leading-relaxed mb-2 bg-white p-3 rounded-lg shadow-sm">
+                            "{answer.text}"
+                          </p>
+                          <div className="flex items-center gap-2">
+                            {answer.playerId ? (
+                              <>
+                                <span className="text-2xl">✍️</span>
+                                <p className="text-sm font-semibold text-primary-600">
+                                  Escrita por: <span className="text-primary-700 bg-primary-100 px-2 py-1 rounded-full">{getPlayerName(answer.playerId)}</span>
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <span className="text-2xl">🎲</span>
+                                <p className="text-sm font-semibold text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+                                  Respuesta oficial del juego
+                                </p>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Votantes */}
+                    <div className="border-t border-neutral-200 pt-3">
+                      {votersForThisAnswer.length > 0 ? (
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-2xl">🗳️</span>
+                            <p className="text-sm font-semibold text-secondary-600">
+                              Votaron por esta respuesta: 
+                              <span className="ml-2 bg-secondary-200 text-secondary-800 px-2 py-1 rounded-full text-xs font-bold">
+                                {votersForThisAnswer.length} {votersForThisAnswer.length === 1 ? 'voto' : 'votos'}
+                              </span>
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {votersForThisAnswer.map((voterId) => (
+                              <motion.div
+                                key={voterId}
+                                className="flex items-center gap-2 bg-gradient-to-r from-secondary-100 to-secondary-200 text-secondary-700 px-3 py-2 rounded-full text-sm font-game shadow-sm border border-secondary-300"
+                                initial={{ scale: 0, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ delay: 0.6 + index * 0.1, type: "spring", stiffness: 300 }}
+                              >
+                                {getPlayerAvatar(voterId) && (
+                                  <div className="w-6 h-6 rounded-full bg-secondary-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                    {getPlayerAvatar(voterId)}
+                                  </div>
+                                )}
+                                <span className="font-semibold">{getPlayerName(voterId)}</span>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 justify-center py-2 text-neutral-500">
+                          <span className="text-2xl">😔</span>
+                          <p className="text-sm italic">
+                            Nadie votó por esta respuesta
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Estadísticas adicionales */}
+            <motion.div
+              className="mt-6 pt-4 border-t border-neutral-200 text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+            >
+              <p className="text-sm text-neutral-600 font-game">
+                📊 Total de votos: {Object.keys(gameState.votes).length} de {gameState.players?.length} jugadores
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
 
         {/* Podio para los top 3 */}
         {playersWithScores.length >= 3 && (

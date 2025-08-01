@@ -1,13 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { GameContext } from '../context/GameContext';
 import PlayerAvatar from './PlayerAvatar';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function Lobby() {
   const { gameState, socket, leaveRoom, kickPlayer } = useContext(GameContext);
+  const [gameSettings, setGameSettings] = useState({
+    roundsMode: 'perPlayer', // 'perPlayer' o 'custom'
+    customRounds: 3
+  });
 
   const startGame = () => {
-    socket.emit('startGame', { roomCode: gameState.roomCode });
+    console.log('Sending game settings:', gameSettings);
+    socket.emit('startGame', { 
+      roomCode: gameState.roomCode,
+      settings: gameSettings
+    });
   };
 
   const handleKickPlayer = (playerId, playerName) => {
@@ -172,6 +180,173 @@ function Lobby() {
             </div>
           )}
         </motion.div>
+
+        {/* Configuración del juego (solo para el host) */}
+        {isHost && (
+          <motion.div
+            className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-primary-200/50 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-game font-bold text-neutral-800 mb-2">
+                ⚙️ Configuración del Juego
+              </h2>
+              <p className="text-neutral-600 font-game">
+                Personaliza la duración de la partida
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              {/* Modo de rondas */}
+              <div>
+                <label className="block text-lg font-game font-semibold text-neutral-800 mb-4 text-center">
+                  📊 Número de Rondas
+                </label>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Opción: Una ronda por jugador */}
+                  <motion.button
+                    type="button"
+                    onClick={() => setGameSettings({...gameSettings, roundsMode: 'perPlayer'})}
+                    className={`p-4 rounded-2xl border-2 transition-all duration-200 ${
+                      gameSettings.roundsMode === 'perPlayer'
+                        ? 'border-primary-500 bg-primary-50 text-primary-700'
+                        : 'border-neutral-300 bg-white hover:border-primary-300'
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">👥</div>
+                      <p className="font-game font-semibold mb-1">
+                        Una por jugador
+                      </p>
+                      <p className="text-sm text-neutral-600">
+                        {gameState.players?.length || 0} rondas
+                      </p>
+                      <p className="text-xs text-neutral-500 mt-2">
+                        Cada jugador será el objetivo una vez
+                      </p>
+                    </div>
+                  </motion.button>
+
+                  {/* Opción: Número personalizado */}
+                  <motion.button
+                    type="button"
+                    onClick={() => setGameSettings({...gameSettings, roundsMode: 'custom'})}
+                    className={`p-4 rounded-2xl border-2 transition-all duration-200 ${
+                      gameSettings.roundsMode === 'custom'
+                        ? 'border-secondary-500 bg-secondary-50 text-secondary-700'
+                        : 'border-neutral-300 bg-white hover:border-secondary-300'
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">🎯</div>
+                      <p className="font-game font-semibold mb-1">
+                        Número personalizado
+                      </p>
+                      <p className="text-sm text-neutral-600">
+                        {gameSettings.customRounds} rondas
+                      </p>
+                      <p className="text-xs text-neutral-500 mt-2">
+                        Elige exactamente cuántas rondas jugar
+                      </p>
+                    </div>
+                  </motion.button>
+                </div>
+
+                {/* Control de número personalizado */}
+                {gameSettings.roundsMode === 'custom' && (
+                  <motion.div
+                    className="mt-4 bg-secondary-50 rounded-2xl p-4 border border-secondary-200"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="text-center">
+                      <label className="block text-secondary-700 font-game font-semibold mb-3">
+                        Número de rondas:
+                      </label>
+                      <div className="flex items-center justify-center gap-4">
+                        <motion.button
+                          type="button"
+                          onClick={() => setGameSettings({
+                            ...gameSettings, 
+                            customRounds: Math.max(1, gameSettings.customRounds - 1)
+                          })}
+                          className="w-10 h-10 bg-secondary-500 hover:bg-secondary-600 text-white rounded-full flex items-center justify-center font-bold transition-colors"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          -
+                        </motion.button>
+                        
+                        <div className="bg-white rounded-xl px-6 py-3 border-2 border-secondary-300 min-w-[80px]">
+                          <span className="text-2xl font-bold text-secondary-700">
+                            {gameSettings.customRounds}
+                          </span>
+                        </div>
+                        
+                        <motion.button
+                          type="button"
+                          onClick={() => setGameSettings({
+                            ...gameSettings, 
+                            customRounds: Math.min(10, gameSettings.customRounds + 1)
+                          })}
+                          className="w-10 h-10 bg-secondary-500 hover:bg-secondary-600 text-white rounded-full flex items-center justify-center font-bold transition-colors"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          +
+                        </motion.button>
+                      </div>
+                      <p className="text-xs text-secondary-600 mt-2">
+                        Entre 1 y 10 rondas
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Resumen de configuración */}
+              <div className="bg-accent-50 rounded-2xl p-4 border border-accent-200">
+                <div className="text-center">
+                  <p className="font-game font-semibold text-accent-700 mb-2">
+                    📋 Resumen de la partida
+                  </p>
+                  <div className="flex justify-center items-center gap-4 text-sm text-accent-600">
+                    <div className="flex items-center gap-1">
+                      <span>👥</span>
+                      <span>{gameState.players?.length || 0} jugadores</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span>🔄</span>
+                      <span>
+                        {gameSettings.roundsMode === 'perPlayer' 
+                          ? `${gameState.players?.length || 0} rondas`
+                          : `${gameSettings.customRounds} rondas`
+                        }
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span>⏱️</span>
+                      <span>~{
+                        gameSettings.roundsMode === 'perPlayer' 
+                          ? Math.ceil(((gameState.players?.length || 0) * 2) / 60) || 1
+                          : Math.ceil((gameSettings.customRounds * 2) / 60) || 1
+                        } min
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Botones de acción */}
         <motion.div
