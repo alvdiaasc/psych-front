@@ -204,14 +204,9 @@ function Leaderboard() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 + index * 0.1 }}
                   >
-                    {/* Respuesta y autor */}
+                    {/* Respuesta (sin mostrar autor) */}
                     <div className="mb-3">
                       <div className="flex items-start gap-3 mb-2">
-                        {answer.playerId && (
-                          <div className="flex-shrink-0">
-                            {renderPlayerAvatar(answer.playerId, 'w-8 h-8')}
-                          </div>
-                        )}
                         <div className="flex-1">
                           <p className="text-neutral-700 font-game text-lg leading-relaxed mb-2 bg-white p-3 rounded-lg shadow-sm">
                             "{answer.text}"
@@ -220,8 +215,8 @@ function Leaderboard() {
                             {answer.playerId ? (
                               <>
                                 <span className="text-2xl">✍️</span>
-                                <p className="text-sm font-semibold text-primary-600">
-                                  Escrita por: <span className="text-primary-700 bg-primary-100 px-2 py-1 rounded-full">{getPlayerName(answer.playerId)}</span>
+                                <p className="text-sm font-semibold text-primary-600 bg-primary-100 px-2 py-1 rounded-full">
+                                  Respuesta de jugador
                                 </p>
                               </>
                             ) : (
