@@ -6,7 +6,7 @@ function QuestionRound() {
   const { gameState, socket } = useContext(GameContext);
   const [answer, setAnswer] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(90);
+  const [timeLeft, setTimeLeft] = useState(60);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
