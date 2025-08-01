@@ -26,6 +26,37 @@ function VotingRound() {
     return player ? player.avatar : null;
   };
 
+  // Función para renderizar el avatar del jugador
+  const renderPlayerAvatar = (playerId, size = 'w-6 h-6') => {
+    const player = gameState.players?.find(p => p.id === playerId);
+    if (!player) return null;
+
+    if (player.avatar && player.avatar.startsWith('data:image')) {
+      // Si es una imagen base64, mostrarla como imagen
+      return (
+        <img 
+          src={player.avatar} 
+          alt={player.name}
+          className={`${size} rounded-full object-cover shadow-sm`}
+        />
+      );
+    } else if (player.avatar) {
+      // Si es un emoji o texto, mostrarlo como texto
+      return (
+        <div className={`${size} rounded-full bg-secondary-500 flex items-center justify-center text-white text-xs font-bold shadow-sm`}>
+          {player.avatar}
+        </div>
+      );
+    } else {
+      // Si no hay avatar, mostrar inicial del nombre
+      return (
+        <div className={`${size} rounded-full bg-secondary-500 flex items-center justify-center text-white text-xs font-bold shadow-sm`}>
+          {player.name.charAt(0).toUpperCase()}
+        </div>
+      );
+    }
+  };
+
   // Verificar si todos los jugadores han votado
   const allPlayersVoted = gameState.votes && 
     Object.keys(gameState.votes).length === gameState.players?.length &&
@@ -273,9 +304,9 @@ function VotingRound() {
                     {/* Respuesta y autor */}
                     <div className="mb-3">
                       <div className="flex items-start gap-3 mb-2">
-                        {answer.playerId && getPlayerAvatar(answer.playerId) && (
-                          <div className="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                            {getPlayerAvatar(answer.playerId)}
+                        {answer.playerId && (
+                          <div className="flex-shrink-0">
+                            {renderPlayerAvatar(answer.playerId, 'w-8 h-8')}
                           </div>
                         )}
                         <div className="flex-1">
@@ -325,11 +356,9 @@ function VotingRound() {
                                 animate={{ scale: 1, opacity: 1 }}
                                 transition={{ delay: 1 + index * 0.1, type: "spring", stiffness: 300 }}
                               >
-                                {getPlayerAvatar(voterId) && (
-                                  <div className="w-6 h-6 rounded-full bg-secondary-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
-                                    {getPlayerAvatar(voterId)}
-                                  </div>
-                                )}
+                                <div className="flex-shrink-0">
+                                  {renderPlayerAvatar(voterId, 'w-6 h-6')}
+                                </div>
                                 <span className="font-semibold">{getPlayerName(voterId)}</span>
                               </motion.div>
                             ))}
